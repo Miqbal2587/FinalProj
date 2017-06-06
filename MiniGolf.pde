@@ -1,13 +1,15 @@
-Ball test = new Ball(10, 10, 10, 0, 0);
+Ball test = new Ball(50, 150, 150);
 
 public void setup(){
   
    size(900,700);
    background(50,205,50);
-   stroke(255);  }
+   noStroke();  
+   test.setup(); }
    
 public void draw(){
-  test.display(); }
+  test.mousePressed();
+  test.draw(); }
   
-void mousePressed(){
-  test.struck(); }
+
+  
