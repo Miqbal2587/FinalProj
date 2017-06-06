@@ -40,6 +40,8 @@ class Ball{
     goalWidth = 50.0; }
     
    public void moveBall(){
+    float xpos =xcor + (xVelocity);
+    float ypos =ycor + (yVelocity);
     xcor += xVelocity;
     ycor += yVelocity; 
     
@@ -50,6 +52,12 @@ class Ball{
     if ( dist(xcor, ycor, goalX, goalY) < (radius +goalWidth) * 0.5){
       setup(); //for testing purposes only
     }
+    if (xpos > width - radius || xpos<radius){
+          xVelocity = xVelocity * -.95;
+        }
+    if (ypos>height-radius || ypos<radius){
+          yVelocity= yVelocity * -.95;
+        }
   }
   
   public void drawBall(){
@@ -82,8 +90,10 @@ class Ball{
         float angleToMouse = atan2(pmouseY - ycor, pmouseX - xcor);
         float ballSpeed = 10.0; //placeholder value for testing, can be flexible
         xVelocity = cos(angleToMouse) * ballSpeed;
-        yVelocity = sin(angleToMouse) * ballSpeed; }
+        yVelocity = sin(angleToMouse) * ballSpeed;
         
+        
+  }
   }
     
   /** to be implemented later
