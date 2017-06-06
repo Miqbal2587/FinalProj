@@ -16,7 +16,8 @@ Features added:
 2) Added friction so the ball doesn't move continually
 3) Added a hole into the course and way to determine whether the ball is in the hole
 
-6/6: Things to work on
--Update control of velocity by fine tuning the "power" of the swing
--Work on making level 1 "semi random" 
--If there is enough time, work on level 2 and the basis brick wall obstacle
+6/6: Accomplished so far
+Fixed bug - the ball now bounces off the walls with reduced speed 
+
+Things to add for tonight: slider or other mechanism to adjust power, add basic obstacles
+If there is time, work on updating course to be semi random
