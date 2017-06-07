@@ -50,7 +50,7 @@ class Ball{
     
     //tolerance value for ball in hole
     //Added Power to determine if ball is going to fast
-    if ( dist(xcor, ycor, goalX, goalY) < (radius +goalWidth) * 0.5 && (xVelocity<5 ||yVelocity<5)){
+    if ( dist(xcor, ycor, goalX, goalY) < (radius +goalWidth) * 0.5 && (xVelocity<5 && yVelocity<5)){
       setup(); //for testing purposes only
       level+=1;
     }
@@ -101,6 +101,18 @@ class Ball{
   //To be used in Obstacle and Course class
   public int getLevel(){
     return level;
+  }
+  public float getGoalX(){
+   return goalX;
+  }
+  public float getGoalY(){
+    return goalY;
+  }
+  public void setGoalY(float y){
+    goalY=y;
+  }
+  public void setGoalX(float x){
+    goalX=x;
   }
   /** to be implemented later
   public int getFriction(){
