@@ -48,7 +48,8 @@ class Ball{
     yVelocity *= 0.97; 
     
     //tolerance value for ball in hole
-    if ( dist(xcor, ycor, goalX, goalY) < (radius +goalWidth) * 0.5){
+    //Added Power to determine if ball is going to fast
+    if ( dist(xcor, ycor, goalX, goalY) < (radius +goalWidth) * 0.5 && (xVelocity<5 ||yVelocity<5)){
       setup(); //for testing purposes only
     }
     if (xpos > width - radius || xpos<radius){
