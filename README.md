@@ -20,5 +20,6 @@ Features added:
 Fixed bug - the ball now bounces off the walls with reduced speed 
 UPDATE: Added user input power
 1) Hover over the slider named Power and mouse scroll over it to adjust power
+
 Things to add for tonight: add basic obstacles
 If there is time, work on updating course to be semi random
