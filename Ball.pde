@@ -17,7 +17,6 @@ class Ball{
   // float friction (to be implemented later)
   // float defaultSpeed (to be adjusted later, refers to ballSpeed in mousePressed() )
   // float velocityTolerance (for the hole class)
-  
   //constructor
   Ball(float r, float x, float y){
     radius = r;
@@ -78,7 +77,7 @@ class Ball{
      text("Strokes: " + strokes, 25, 25); //display stroke count
   }
       
-  public void mousePressed(){
+  public void mousePressed(float power){
         
       if (mousePressed == true){
         float currentSpeed = dist(0.0, 0.0, xVelocity, yVelocity);
@@ -88,7 +87,7 @@ class Ball{
         strokes += 1;  //update stroke count
       
         float angleToMouse = atan2(pmouseY - ycor, pmouseX - xcor);
-        float ballSpeed = 10.0; //placeholder value for testing, can be flexible
+        float ballSpeed = power; 
         xVelocity = cos(angleToMouse) * ballSpeed;
         yVelocity = sin(angleToMouse) * ballSpeed;
         
