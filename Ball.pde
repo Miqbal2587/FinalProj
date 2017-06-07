@@ -3,7 +3,8 @@ class Ball{
   //THINGS TO FIX:
   //1 - ADJUST POWER OF SWING BASED ON DISTANCE FROM WHERE MOUSE IS CLICKED
   //2 - MAKE A VELOCITY TOLERANCE RANGE WHEN BALL ENTERS HOLE (IF TOO FAST, BALL WILL GO OVER);
-  
+  //Level determination
+  int level=1;
   //ball dimensions and stats 
   float xcor, ycor, radius;
   float xVelocity = 0.0, yVelocity = 0.0;
@@ -51,6 +52,7 @@ class Ball{
     //Added Power to determine if ball is going to fast
     if ( dist(xcor, ycor, goalX, goalY) < (radius +goalWidth) * 0.5 && (xVelocity<5 ||yVelocity<5)){
       setup(); //for testing purposes only
+      level+=1;
     }
     if (xpos > width - radius || xpos<radius){
           xVelocity = xVelocity * -.95;
@@ -76,6 +78,7 @@ class Ball{
      drawBall();
      
      text("Strokes: " + strokes, 25, 25); //display stroke count
+     text("Level: " + level, 25, 50); //display stroke count
   }
       
   public void mousePressed(float power){
@@ -95,7 +98,10 @@ class Ball{
         
   }
   }
-    
+  //To be used in Obstacle and Course class
+  public int getLevel(){
+    return level;
+  }
   /** to be implemented later
   public int getFriction(){
       return friction;  }
