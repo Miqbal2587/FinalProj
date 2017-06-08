@@ -16,10 +16,15 @@ Features added:
 2) Added friction so the ball doesn't move continually
 3) Added a hole into the course and way to determine whether the ball is in the hole
 
-6/6: Accomplished so far
+6/7: UPDATE
 Fixed bug - the ball now bounces off the walls with reduced speed 
-UPDATE: Added user input power
-1) Hover over the slider named Power and mouse scroll over it to adjust power
+1) Added user input power - Hover over the slider named Power and mouse scroll over it to adjust power
+2) Added min velocity in which ball goes too fast, it will go over the hole without going in
+3) Added first obstacle type - brick wall - in which the ball bounces off of
 
-Things to add for tonight: add basic obstacles
-If there is time, work on updating course to be semi random
+6/8: Things to add today
+1) Start working on terrain types - grass, sand, and if there is time water
+2) ** Export hole and obstacles classes into separate classes outside of the ball class
+3) ** Start working on random course generators based on level difficulty to determine approximation of coordinates
+4) ** Start working on level keeping system to progress to more difficuly levels
+
