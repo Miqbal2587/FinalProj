@@ -13,6 +13,9 @@ class Ball{
   //goal dimensions -> this will be put in another class later
   float goalX, goalY, goalWidth;
   
+  //displat variables
+  int distance, speed;
+  
   //misc, to be implemented later
   int strokes = 0;
   // float friction (to be implemented later)
@@ -35,10 +38,20 @@ class Ball{
     radius = 30.0;
     
     //sample hole -> we'll make a seperate hole class later
-    goalX = width - 100.0;
-    goalY = height - 100.0; 
+    goalX = width/2;
+    goalY = height/2; 
     goalWidth = 50.0; }
     
+   public void displayDist(){
+     distance =  int(dist(xcor, ycor, goalX, goalY)); }
+     
+   public void displaySpeed(float power){
+      float angleToMouse = atan2(pmouseY - ycor, pmouseX - xcor);
+      float ballSpeed = power; 
+      speed = int(sqrt( pow(xVelocity, 2) + pow(yVelocity, 2))); //true velocity formula
+   }
+   
+   
    public void moveBall(){
     float xpos =xcor + (xVelocity);
     float ypos =ycor + (yVelocity);
@@ -50,7 +63,8 @@ class Ball{
     
     //tolerance value for ball in hole
     //Added Power to determine if ball is going to fast
-    if ( dist(xcor, ycor, goalX, goalY) < (radius +goalWidth) * 0.5 && (xVelocity<5 && yVelocity<5)){
+    if ( dist(xcor, ycor, goalX, goalY) < (radius +goalWidth) * 0.5){
+    //&& (xVelocity<20 || yVelocity<20)){
       setup(); //for testing purposes only
       level+=1;
     }
@@ -60,6 +74,8 @@ class Ball{
     if (ypos>height-radius || ypos<radius){
           yVelocity= yVelocity * -.95;
         }
+        
+    
   }
   
   public void drawBall(){
@@ -79,6 +95,8 @@ class Ball{
      
      text("Strokes: " + strokes, 25, 25); //display stroke count
      text("Level: " + level, 25, 50); //display stroke count
+     text("Distance to Goal: " + distance, 25, 75); //for testing purposes
+     text("Ball Speedometer: " + speed, 25, 100); //for testing purposes
   }
       
   public void mousePressed(float power){
