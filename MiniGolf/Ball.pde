@@ -1,14 +1,17 @@
 class Ball{
 
   //THINGS TO FIX:
-  //1 - ADJUST POWER OF SWING BASED ON DISTANCE FROM WHERE MOUSE IS CLICKED
-  //2 - MAKE A VELOCITY TOLERANCE RANGE WHEN BALL ENTERS HOLE (IF TOO FAST, BALL WILL GO OVER);
+  //1 - KEEP TESTING VELOCITY TOLERANCE RANGE WHEN BALL ENTERS HOLE (IF TOO FAST, BALL WILL GO OVER);
+  //2 - FINE TUNE THE BALL'S INTERACTION WITH OBSTACLE
+  //3 - EXPORT HOLE AND OBSTACLE CLASSES INTO SEPARATE CLASSES ***
+  //4 - START WORKING ON TERRAIN DEVELOPMENT
+  
+  
   //Level determination
   int level=1;
   //ball dimensions and stats 
   float xcor, ycor, radius;
   float xVelocity = 0.0, yVelocity = 0.0;
-  float topSpeed = 0.5; //to be used later when stroking
  
   //goal dimensions -> this will be put in another class later
   float goalX, goalY, goalWidth;
@@ -40,15 +43,24 @@ class Ball{
     //sample hole -> we'll make a seperate hole class later
     goalX = width/2;
     goalY = height/2; 
-    goalWidth = 50.0; }
+    goalWidth = 50.0;
+    setupWall();
+    drawWall(); }
     
    public void displayDist(){
      distance =  int(dist(xcor, ycor, goalX, goalY)); }
      
-   public void displaySpeed(float power){
-      float angleToMouse = atan2(pmouseY - ycor, pmouseX - xcor);
-      float ballSpeed = power; 
+   public void displaySpeed(){
       speed = int(sqrt( pow(xVelocity, 2) + pow(yVelocity, 2))); //true velocity formula
+   }
+   
+   //semi random values - use general ranges
+   public boolean isSpeedValid(){
+    if (distance <= 200 && speed >= 30){
+        return false; }
+    return true;
+       
+     
    }
    
    
@@ -63,8 +75,7 @@ class Ball{
     
     //tolerance value for ball in hole
     //Added Power to determine if ball is going to fast
-    if ( dist(xcor, ycor, goalX, goalY) < (radius +goalWidth) * 0.5){
-    //&& (xVelocity<20 || yVelocity<20)){
+    if ( dist(xcor, ycor, goalX, goalY) < (radius +goalWidth) * 0.5 && isSpeedValid()){
       setup(); //for testing purposes only
       level+=1;
     }
@@ -75,6 +86,10 @@ class Ball{
           yVelocity= yVelocity * -.95;
         }
         
+    //work on bouncing off wall/obstacle
+    if ((xpos < obsX + obsWid && xpos > obsX) && (ypos < obsY + obsHeight && ypos > obsY)){
+      xVelocity *= -.95; 
+      yVelocity *= -.95; }           
     
   }
   
@@ -91,6 +106,7 @@ class Ball{
      fill (120, 120, 120); //this is the hole
      ellipse(goalX, goalY, goalWidth, goalWidth); //sample hole
      
+     drawWall();
      drawBall();
      
      text("Strokes: " + strokes, 25, 25); //display stroke count
@@ -103,8 +119,6 @@ class Ball{
         
       if (mousePressed == true){
         float currentSpeed = dist(0.0, 0.0, xVelocity, yVelocity);
-        if (currentSpeed > topSpeed){
-          return; }
           
         strokes += 1;  //update stroke count
       
@@ -138,5 +152,25 @@ class Ball{
       
    public void setFriction(int x){
        friction = x; } */ 
+       
+   //instance variables for osbtacle
+  int obstacleType = 0; //default 0 is brick wall
+  int obsX, obsY, obsHeight, obsWid;
+ 
+  //default values
+  public void setupWall(){
+   obsX = width/2 + 30;
+   obsY = height/2 + 30;
+   obsHeight = 50;
+   obsWid = 65;
+  }
+  
+  public void drawWall(){
+    fill(220,20,60); //crimson
+    noStroke();
+    rect(obsX,obsY,obsHeight,obsWid);
+  }    
+       
+       
 
 }
