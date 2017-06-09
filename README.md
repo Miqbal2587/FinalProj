@@ -22,9 +22,16 @@ Fixed bug - the ball now bounces off the walls with reduced speed
 2) Added min velocity in which ball goes too fast, it will go over the hole without going in
 3) Added first obstacle type - brick wall - in which the ball bounces off of
 
-6/8: Things to add today
-1) Start working on terrain types - grass, sand, and if there is time water
-2) ** Export hole and obstacles classes into separate classes outside of the ball class
-3) ** Start working on random course generators based on level difficulty to determine approximation of coordinates
-4) ** Start working on level keeping system to progress to more difficuly levels
+6/8: UPDATE
+1) Added terrain types elevation, depression, sand, and water
+2) Began working on random course generation, so far only works for level 1
+Made major strides today
+
+6/9: Things to add
+1) Start working on progressing up levels and begin level 2
+2) Fine tune the random course generator
+3) Add more shape types for terrains and obstacles
+4) Begin working on new obstacle types
+5) Keep testing the terrains and debug anything if neccesary
+
 
