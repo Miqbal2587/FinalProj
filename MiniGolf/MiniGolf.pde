@@ -16,7 +16,7 @@ public void setup(){
 public void draw(){
   power=MyController.getController("Power").getValue();
   test.displayDist();
-  test.displaySpeed(power);
+  test.displaySpeed();
   test.mousePressed(power);
   test.draw(); 
 }

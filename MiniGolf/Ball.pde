@@ -16,7 +16,9 @@ class Ball{
   //goal dimensions -> this will be put in another class later
   float goalX, goalY, goalWidth;
   
-  //displat variables
+  float topSpeed = 0.5; //for strokes
+  
+  //display variables
   int distance, speed;
   
   //misc, to be implemented later
@@ -119,7 +121,8 @@ class Ball{
         
       if (mousePressed == true){
         float currentSpeed = dist(0.0, 0.0, xVelocity, yVelocity);
-          
+        if (currentSpeed > topSpeed){
+          return; }
         strokes += 1;  //update stroke count
       
         float angleToMouse = atan2(pmouseY - ycor, pmouseX - xcor);
@@ -159,8 +162,8 @@ class Ball{
  
   //default values
   public void setupWall(){
-   obsX = width/2 + 30;
-   obsY = height/2 + 30;
+   obsX = 375;
+   obsY = 300;
    obsHeight = 50;
    obsWid = 65;
   }
@@ -170,6 +173,14 @@ class Ball{
     noStroke();
     rect(obsX,obsY,obsHeight,obsWid);
   }    
+  
+  //terrain types
+  int terrainType; //1 - elevation(dark green), 2 - depression(light green), 3 - sand, 4 - water
+  int terrainShape; //1 - arc, 2 - ellipse, 3 - quad, 4 - rect, 5 - triangle
+  
+  
+  
+  
        
        
 
