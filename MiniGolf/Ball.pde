@@ -5,10 +5,7 @@ class Ball{
   //2 - FINE TUNE THE BALL'S INTERACTION WITH OBSTACLES
   
   // 6/8 UPDATE
-  //3 - FIX BALL'S INTERACTION WITH TERRAIN
-  //4 - The ball has weird bugs sometimes (doesn't touch terrain but still accelerates/decelerates)
-  //5 - Make ball's speed in terms of sqrt(xvelocity^2 + yvelocity^2) instead of separate x and y velocity components
-  
+  //3 - FINE TUNE BALL'S INTERACTION WITH TERRAIN
   
   //Level determination - to be used later for course generation
   int level=1;
@@ -25,14 +22,13 @@ class Ball{
   int distance, speed;
   int strokes = 0;
   
-  
-  // float friction (to be implemented later)
-  
   //constructor
   Ball(float r, float x, float y){
     radius = r;
     xcor = x;
     ycor = y; } 
+  
+   // float friction (to be implemented later)
     
    //default values - reset when ball reaches hole
    public void setup(){
@@ -53,9 +49,13 @@ class Ball{
     setupWall();
     drawWall();
     
-    //sample water terrain
-    setupTerrain(3,4,1,4);
-    drawTerrain(2,1,4); }
+    //sample terrain
+    //terrain types 1 - elevation, 2 - depression, 3 - sand, 4 - water  
+    //setupTerrain(int number, int type, int size, int difficulty)
+    //drawTerrain(int number, int type, int shape)
+    
+    setupTerrain(1,1,2,3); 
+    drawTerrain(1,1,1); }
     
    public void displayDist(){
      distance =  int(dist(xcor, ycor, goalX, goalY)); }
@@ -88,14 +88,14 @@ class Ball{
       level+=1; }
       
     //bounce off walls  
-    if (xpos > width - radius || xpos<radius){
+    if (xpos >= width - radius || xpos <= radius){
           //placeholder values
           xVelocity = xVelocity * -.95; }
-    if (ypos>height-radius || ypos<radius){
+    if (ypos >= height-radius || ypos <= radius){
           yVelocity= yVelocity * -.95; }
         
     //work on bouncing off wall/obstacle
-    if ((xpos < obsX1 + obsWid1 && xpos > obsX1) && (ypos < obsY1 + obsHeight1 && ypos > obsY1)){
+    if ((xpos <= obsX1 + obsWid1 && xpos >= obsX1) && (ypos <= obsY1 + obsHeight1 && ypos >= obsY1)){
       xVelocity *= -.95; 
       yVelocity *= -.95; }    
       
@@ -104,23 +104,35 @@ class Ball{
     
     //BUG - THIS ONLY WORKS FOR RECTANLES, ADJUST FOR CIRCLES LATER
     //BUG - *** Ball gets affcted even though it's not touching terrain, work on adjusting coordinates later
-    if ((xpos < terrainX1 + terrainWid1 && xpos > terrainX1) && 
-      (ypos < terrainY1 + terrainHeight1 && ypos > terrainY1)){
+    if ((xpos <= terrainX1 + terrainWid1 && xpos >= terrainX1) && 
+      (ypos <= terrainY1 + terrainHeight1 && ypos >= terrainY1)){
         
         //elevation - continually reverses ball's velocity (speeds down, then speeds up other way)
         //this has many bugs, WORK ON COMPLETELY REVERSING BALL'S DIRECTION RATHER THAN DEFLECTING
+     
+        
         if (terrainType1 == 1){
-           while (xVelocity > 0.05 && yVelocity > 0.05){
-             xVelocity *= 0.05;
-             yVelocity *= 0.05; }
+         
+          //if ball is well inside the hill and not fast enough, reverse direction   
+          if ((xpos <= terrainX1 + terrainWid1 - terrainWid1/4.0 && xpos >= terrainX1 + terrainWid1/4.0) && 
+              (ypos <= terrainY1 + terrainHeight1 - terrainHeight1/4.0 && ypos >= terrainY1 + terrainHeight1/4)){
+                
+                //placeholder value for "min" speed to go over hill
+                if (speed <= 15){
+                  xVelocity *= -.95;
+                  yVelocity *= -.95; }
             
-           if (xVelocity > yVelocity){
-             xVelocity = -5;
-             yVelocity = 0.01; }
+           }
+           
            else{
-             yVelocity = -5;
-             xVelocity = 0.01;}
-             
+              //keep slowing down until you reach top of hill
+              if (xVelocity > 0){
+                xVelocity -= terrainMod1; }
+                
+              if (yVelocity > 0){
+                yVelocity -= terrainMod1; }
+            }
+    
         }
              
         //depression - adds a boost to ball's speed
@@ -159,6 +171,8 @@ class Ball{
      fill(255);
      noStroke();
      ellipse(xcor, ycor, radius, radius); }
+     
+     
     
   public void draw(){
      background(50,205,50);
@@ -168,7 +182,9 @@ class Ball{
      ellipse(goalX, goalY, goalWidth, goalWidth); //sample hole
      
      drawWall();
-     drawTerrain(2,1,4);
+     
+     //drawTerrain(int number, int type, int shape)
+     drawTerrain(1,1,1);
      
      drawBall();
      
@@ -204,7 +220,12 @@ class Ball{
    //instance variables for osbtacle
   int obstacleType = 0; //default 0 is brick wall
   int obsX1, obsY1, obsHeight1, obsWid1;
-  int obsX2, obsY2, obsHeight2, obsWid2; //for more obstacles to be added
+  int obsX2, obsY2, obsHeight2, obsWid2;
+  int obsX3, obsY3, obsHeight3, obsWid3;
+  int obsX4, obsY4, obsHeight4, obsWid4;
+  int obsX5, obsY5, obsHeight5, obsWid5;
+  int obsX6, obsY6, obsHeight6, obsWid6;
+  int obsX7, obsY7, obsHeight7, obsWid7;
  
   //default values, add parameters later
   public void setupWall(){
@@ -222,17 +243,20 @@ class Ball{
   //we can fix this later but make friction/slope adjustable as level progresses
   //"mod" variable refers to how it modifies ball's velocity; we'll work on this later after testing some default values
   //type refers to terrain type
-  int terrainX1, terrainY1, terrainHeight1, terrainWid1, terrainMod1, terrainType1; //refers to each instance of a terrain, let's set a max amount later
+  int terrainX1, terrainY1, terrainHeight1, terrainWid1, terrainMod1, terrainType1; //refers to each instance of a terrain
   int terrainX2, terrainY2, terrainHeight2, terrainWid2, terrainMod2, terrainType2;
   int terrainX3, terrainY3, terrainHeight3, terrainWid3, terrainMod3, terrainType3;
   int terrainX4, terrainY4, terrainHeight4, terrainWid4, terrainMod4, terrainType4;
   int terrainX5, terrainY5, terrainHeight5, terrainWid5, terrainMod5, terrainType5;
-  
-  //for size -> 1 - small, 2 - medium, 3 - large
-  //type refers to type of terrain
+  int terrainX6, terrainY6, terrainHeight6, terrainWid6, terrainMod6, terrainType6;
+  int terrainX7, terrainY7, terrainHeight7, terrainWid7, terrainMod7, terrainType7;
+ 
+ 
   //number refers to the instance of the terrain
+  //type refers to type of terrain
+  //for size -> 1 - small, 2 - medium, 3 - large
   //the higher the difficulty, the more it will affect the ball's velocity
-  public void setupTerrain(int size, int type, int number, int difficulty){
+  public void setupTerrain(int number, int type, int size, int difficulty){
   
       //default values to be adjusted later
       if (number == 1){
@@ -251,13 +275,53 @@ class Ball{
         terrainMod2 = difficulty; 
         terrainType2 = type; }
         
+      if (number == 3){
+        terrainX3 = 200;
+        terrainY3 = 200;
+        terrainHeight3 = 35 * size;
+        terrainWid3 = 45 * size;
+        terrainMod3 = difficulty; 
+        terrainType3 = type; }
+        
+      if (number == 4){
+        terrainX4 = 200;
+        terrainY4 = 200;
+        terrainHeight4 = 35 * size;
+        terrainWid4 = 45 * size;
+        terrainMod4 = difficulty; 
+        terrainType4 = type; }
+        
+      if (number == 5){
+        terrainX5 = 200;
+        terrainY5 = 200;
+        terrainHeight5 = 35 * size;
+        terrainWid5 = 45 * size;
+        terrainMod5 = difficulty; 
+        terrainType5 = type; }
+        
+      if (number == 6){
+        terrainX6 = 200;
+        terrainY6 = 200;
+        terrainHeight6 = 100 * size;
+        terrainWid6 = 125 * size;
+        terrainMod6 = difficulty; 
+        terrainType6 = type; }
+        
+      if (number == 7){
+        terrainX7 = 200;
+        terrainY7 = 200;
+        terrainHeight7 = 35 * size;
+        terrainWid7 = 45 * size;
+        terrainMod7 = difficulty; 
+        terrainType7 = type; }
+        
   }
         
   //velocity will be affected in the ball's move function
    
   //terrain types 1 - elevation(dark green), 2 - depression(light green), 3 - sand, 4 - water    
   //for shape -> 1 - ellipse, 2 - rect (basic shapes, add more later)   
-  public void drawTerrain(int shape, int number, int type){
+  public void drawTerrain(int number, int type, int shape){
     
      if (type == 1){
         //dark green
@@ -278,20 +342,98 @@ class Ball{
     if (shape == 1){
       noStroke();
       if (number == 1){
-        ellipse(terrainX1, terrainY1, terrainHeight1, terrainWid1); }
+        rect(terrainX1, terrainY1, terrainHeight1, terrainWid1); }
       if (number == 2){
-        ellipse(terrainX2, terrainY2, terrainHeight2, terrainWid2); }
+        rect(terrainX2, terrainY2, terrainHeight2, terrainWid2); }
+      if (number == 3){
+        rect(terrainX3, terrainY3, terrainHeight3, terrainWid3); }
+      if (number == 4){
+        rect(terrainX4, terrainY4, terrainHeight4, terrainWid4); }
+      if (number == 5){
+        rect(terrainX5, terrainY5, terrainHeight5, terrainWid5); }
+      if (number == 6){
+        rect(terrainX6, terrainY6, terrainHeight6, terrainWid6); }
+      if (number == 7){
+        rect(terrainX7, terrainY7, terrainHeight7, terrainWid7); }
     }
     
     if (shape == 2){
       noStroke();
       if (number == 1){
-        rect(terrainX1, terrainY1, terrainHeight1, terrainWid1); }
+        ellipse(terrainX1, terrainY1, terrainHeight1, terrainWid1); }
       if (number == 2){
-        rect(terrainX2, terrainY2, terrainHeight2, terrainWid2); }
+        ellipse(terrainX2, terrainY2, terrainHeight2, terrainWid2); }
+      if (number == 3){
+        ellipse(terrainX3, terrainY3, terrainHeight3, terrainWid3); }
+      if (number == 4){
+        ellipse(terrainX4, terrainY4, terrainHeight4, terrainWid4); }
+      if (number == 5){
+        ellipse(terrainX5, terrainY5, terrainHeight5, terrainWid5); }
+      if (number == 6){
+        ellipse(terrainX6, terrainY6, terrainHeight6, terrainWid6); }
+      if (number == 7){
+        ellipse(terrainX7, terrainY7, terrainHeight7, terrainWid7); }
     }
   
    }
+   
+   
+   //BEGIN RANDOM COURSE GENERATOR - LEVEL 1
+   public void setup1(){
+    strokes = 0;
+    xVelocity = 0.0;
+    yVelocity = 0.0; 
+    radius = 30.0;
+    goalWidth = 50.0;
+    
+    int rand;
+    rand = int(random(0,5)); //4 possible ways
+    
+    //just some random values
+    if (rand == 0){
+      xcor = 150.0;
+      ycor = 150.0;
+      goalX = width/2;
+      goalY = height/2; }
+      
+    if (rand == 1){
+      xcor = 450.0;
+      ycor = 450.0;
+      goalX = 50.0;
+      goalY = 50.0; }
+      
+    if (rand == 2){
+      xcor = 450.0;
+      ycor = 150.0;
+      goalX = 25.0;
+      goalY = 600.0; }
+      
+    if (rand == 3){
+      xcor = 150.0;
+      ycor = 450.0; 
+      goalX = width/2 + 300;
+      goalY = height/2 + 300; }
+      
+    
+  
+    goalX = width/2;
+    goalY = height/2; 
+    
+    
+    
+    //sample wall obstacle
+    setupWall();
+    drawWall();
+    
+    //sample terrain
+    //terrain types 1 - elevation, 2 - depression, 3 - sand, 4 - water  
+    //setupTerrain(int number, int type, int size, int difficulty)
+    //drawTerrain(int number, int type, int shape)
+    
+    setupTerrain(1,1,2,3); 
+    drawTerrain(1,1,1); }
+    
+   
    
    
 
