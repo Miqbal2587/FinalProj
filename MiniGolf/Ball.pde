@@ -2,6 +2,10 @@ import java.util.Random;
 
 class Ball{
   
+    //NOTE: When the walls, terrain get too large, the ball bounces off at "invisible" spots
+    //So keep the wall, terrain sizes relatively small
+    //Make small obstacles and terrain for the levels
+  
     //Level determination - to be used later for course generation
     int level = 1;
     
@@ -136,6 +140,7 @@ class Ball{
        
     //RANDOM COURSE GENERATOR
      public void setup(){
+      resetObstacleTerrain();
       strokes = 0;
       xVelocity = 0.0;
       yVelocity = 0.0; 
@@ -208,25 +213,30 @@ class Ball{
           terrainType2 = 1;
           drawTerrain(1, 1); }
           
-       //level 1 version 4 
+      //level 1 version 4 
       if (rand == 4){
           version = 4;
           xcor = 100.0;
           ycor = 100.0;
-          goalX = 700.0;
+          goalX = 725.0;
           goalY = 100.0;
           
           //wall and sand
           setupWall(1, 700, 200, 100, 130);
           drawWall(1);
           
-          terrainX1 = 400;
+          terrainX1 = 600;
           terrainY1 = 50;
           terrainH1 = 150;
           terrainW1 = 115;
           terrainType1 = 2;
           drawTerrain(1, 2); }
-     }
+          
+       terrainL1 = terrainX1 - (terrainW1 / 2);
+       terrainR1 = terrainX1 + (terrainW1 / 2);
+       terrainT1 = terrainY1 - (terrainH1 / 2);
+       terrainB1 = terrainY1 + (terrainH1 / 2); }
+     
      
        if (level == 2){
           
@@ -243,21 +253,13 @@ class Ball{
           goalY = 350; 
         
           //wall and sand
-          setupWall(1, 300, 150, 125, 120);
-          /** obsX1 = 300;
-          obsY1 = 150;
-          obsH1 = 125;
-          obsW1 = 120;
-          obsL1 = obsX1 - (obsW1 / 2);
-          obsR1 = obsX1 + (obsW1 / 2);
-          obsT1 = obsY1 - (obsH1 / 2);
-          obsB1 = obsY1 + (obsH1 / 2);
-         // setupWall(2, 125, 175, 600, 125); */
+          setupWall(1, 275, 280, 125, 160);
+          setupWall(2, 400, 130, 125, 120);
           drawWall(1); 
-          //drawWall(2); 
+          drawWall(2); 
           
           terrainX1 = 400;
-          terrainY1 = 425;
+          terrainY1 = 450;
           terrainH1 = 125;
           terrainW1 = 150;
           terrainType1 = 2; 
@@ -270,31 +272,98 @@ class Ball{
             goalX = 450;
             goalY = 350; 
             
-            setupWall(1, 150, 0, 100, 150);
-            /** obsX1 = 150;
-            obsY1 = 0;
-            obsH1 = 100;
-            obsW1 = 700;
-            obsL1 = obsX1 - (obsW1 / 2);
-            obsR1 = obsX1 + (obsW1 / 2);
-            obsT1 = obsY1 - (obsH1 / 2);
-            obsB1 = obsY1 + (obsH1 / 2); */
+            setupWall(1, 275, 280, 125, 160);
+            setupWall(2, 400, 130, 125, 120);
             drawWall(1);
+            drawWall(2);
             
           
-            terrainX1 = 300;
-            terrainY1 = 50;
-            terrainH1 = 200;
-            terrainW1 = 300;
-            terrainType1 = 2;
-            drawTerrain(1,2); }
+            terrainX1 = 275;
+            terrainY1 = 550;
+            terrainH1 = 125;
+            terrainW1 = 200; //150
+            terrainType1 = 3;
+            drawTerrain(1,3); }
             
-          }  
-           
+            terrainL1 = terrainX1 - (terrainW1 / 2);
+            terrainR1 = terrainX1 + (terrainW1 / 2);
+            terrainT1 = terrainY1 - (terrainH1 / 2);
+            terrainB1 = terrainY1 + (terrainH1 / 2); }
+            
+            
+        if (level == 3){
+          int rand;
+          Random ran = new Random();
+          rand = ran.nextInt(2) + 1;
+          
+          //level 3 version 7 - water is buggy
+          if (rand == 1){
+            version = 7;
+            xcor = 50.0;
+            ycor = 50.0;
+            goalX = 450;
+            goalY = 350;
+            
+            setupWall(1, 275, 280, 125, 120);
+            setupWall(2, 400, 130, 125, 120);
+            setupWall(3, 400, 450, 125, 120); 
+            drawWall(1); 
+            drawWall(2); 
+            drawWall(3);
+            
+            originalX = 50.0;
+            originalY = 50.0;
+            
+            terrainX1 = 700;
+            terrainY1 = 150;
+            terrainH1 = 125;
+            terrainW1 = 300;
+            terrainType1 = 3;
+            
+            terrainX2 = 700;
+            terrainY2 = 650;
+            terrainH2 = 125;
+            terrainW2 = 300;
+            terrainType2 = 3;
+            drawTerrain(1, 3);
+            drawTerrain(2, 3); }
+            
+          //level 3 version 8 - very buggy
+          if (rand == 2){
+            version = 8;
+            xcor = 50.0;
+            ycor = 50.0;
+            goalX = 700;
+            goalY = 700;
+            
+            setupWall(1, 200, 200, 100, 300);
+            setupWall(2, 600, 600, 100, 300);
+            drawWall(1);
+            drawWall(2);
+            
+            terrainX1 = 800;
+            terrainY1 = 200;
+            terrainH1 = 200;
+            terrainW1 = 100;
+            terrainType1 = 2;
+            drawTerrain(1, 2);
+            
+          }
+          
           terrainL1 = terrainX1 - (terrainW1 / 2);
           terrainR1 = terrainX1 + (terrainW1 / 2);
           terrainT1 = terrainY1 - (terrainH1 / 2);
-          terrainB1 = terrainY1 + (terrainH1 / 2); }
+          terrainB1 = terrainY1 + (terrainH1 / 2);
+          
+          terrainL2 = terrainX2 - (terrainW2 / 2);
+          terrainR2 = terrainX2 + (terrainW2 / 2);
+          terrainT2 = terrainY2 - (terrainH2 / 2);
+          terrainB2 = terrainY2 + (terrainH2 / 2);
+          
+        }  
+            
+           
+ }
        
             
     public void draw(){
@@ -326,6 +395,13 @@ class Ball{
          drawTerrain(1,2); }
          
        if (version == 6){
+         drawTerrain(1,3); }
+         
+       if (version == 7){
+         drawTerrain(1,3);
+         drawTerrain(2,3); }
+         
+       if (version == 8){
          drawTerrain(1,2); }
        
        drawBall();
@@ -506,7 +582,7 @@ class Ball{
     
      }
      
-     /** public void resetObstacleTerrain(){
+     public void resetObstacleTerrain(){
        obsX1 = 0;
        obsY1 = 0;
        obsH1 = 0;
@@ -640,7 +716,7 @@ class Ball{
        terrainT7 = 0;
        terrainB7 = 0;
        
-     } */
+     } 
    
   
 }
