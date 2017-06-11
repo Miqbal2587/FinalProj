@@ -7,7 +7,7 @@ class Ball{
     //Make small obstacles and terrain for the levels
   
     //Level determination - to be used later for course generation
-    int level = 1;
+    int level = 5;
     
     //ball dimensions and stats 
     float xcor, ycor, radius;
@@ -146,21 +146,19 @@ class Ball{
       yVelocity = 0.0; 
       radius = 30.0;
       goalWidth = 50.0;
+      rectMode(CENTER);
       
      if (level == 1){ 
       int rand;
       Random ran = new Random();
       rand = ran.nextInt(4) + 1;
       
-      rectMode(CENTER);
+      
       //level 1 version 1
       if (rand == 1){
         version = 1;
-        xcor = 150.0;
-        ycor = 150.0;
-        goalX = width/2;
-        goalY = height/2; 
-      
+        setupStart(150.0, 150.0, width/2, height/2);
+        
         //wall and sand
         setupWall(1, 600, 300, 50, 75); 
         drawWall(1); 
@@ -175,10 +173,7 @@ class Ball{
      //level 1 version 2
      if (rand == 2){
          version = 2;
-         xcor = 150.0; 
-         ycor = 675.0; 
-         goalX = 750.0;
-         goalY = 75.0;
+         setupStart(150.0, 675.0, 750, 75);
          
          originalX = 150.0;
          originalY = 675.0; 
@@ -196,11 +191,8 @@ class Ball{
        
       //level 1 version 3 
       if (rand == 3){
+          setupStart(50.0, 50.0, 700, 700);
           version = 3;
-          xcor = 50.0;
-          ycor = 50.0;
-          goalX = 700.0;
-          goalY = 700.0;
           
           //wall and depression  
           setupWall(1, height/2 + 50, width/2 + 50, 200, 200);
@@ -216,10 +208,7 @@ class Ball{
       //level 1 version 4 
       if (rand == 4){
           version = 4;
-          xcor = 100.0;
-          ycor = 100.0;
-          goalX = 725.0;
-          goalY = 100.0;
+          setupStart(100.0, 100.0, 725, 100);
           
           //wall and sand
           setupWall(1, 700, 200, 100, 130);
@@ -247,10 +236,7 @@ class Ball{
         //level 2 version 5
         if (rand == 1){
           version = 5;
-          xcor = 50.0;
-          ycor = 50.0;
-          goalX = 450;
-          goalY = 350; 
+          setupStart(50.0, 50.0, 450, 350);
         
           //wall and sand
           setupWall(1, 275, 280, 125, 160);
@@ -265,19 +251,19 @@ class Ball{
           terrainType1 = 2; 
           drawTerrain(1,2); }
           
+          //level 2 version 6
           if (rand == 2){
             version = 6;
-            xcor = 50.0;
-            ycor = 50.0;
-            goalX = 450;
-            goalY = 350; 
+            setupStart(50.0, 50.0, 450, 350);
+            originalX = 50.0;
+            originalY = 50.0;
             
             setupWall(1, 275, 280, 125, 160);
             setupWall(2, 400, 130, 125, 120);
             drawWall(1);
             drawWall(2);
             
-          
+            //water
             terrainX1 = 275;
             terrainY1 = 550;
             terrainH1 = 125;
@@ -296,13 +282,10 @@ class Ball{
           Random ran = new Random();
           rand = ran.nextInt(2) + 1;
           
-          //level 3 version 7 - water is buggy
+          //level 3 version 7
           if (rand == 1){
             version = 7;
-            xcor = 50.0;
-            ycor = 50.0;
-            goalX = 450;
-            goalY = 350;
+            setupStart(50.0, 50.0, 450, 350);
             
             setupWall(1, 275, 280, 125, 120);
             setupWall(2, 400, 130, 125, 120);
@@ -317,33 +300,30 @@ class Ball{
             terrainX1 = 700;
             terrainY1 = 150;
             terrainH1 = 125;
-            terrainW1 = 300;
+            terrainW1 = 175;
             terrainType1 = 3;
             
             terrainX2 = 700;
             terrainY2 = 650;
             terrainH2 = 125;
-            terrainW2 = 300;
+            terrainW2 = 175;
             terrainType2 = 3;
             drawTerrain(1, 3);
             drawTerrain(2, 3); }
             
-          //level 3 version 8 - very buggy
+          //level 3 version 8 - fixed bugs
           if (rand == 2){
             version = 8;
-            xcor = 50.0;
-            ycor = 50.0;
-            goalX = 700;
-            goalY = 700;
+            setupStart(50.0, 50.0, 700, 700);
             
-            setupWall(1, 200, 200, 100, 300);
-            setupWall(2, 600, 600, 100, 300);
+            setupWall(1, 200, 200, 100, 150);
+            setupWall(2, 600, 600, 100, 150);
             drawWall(1);
             drawWall(2);
             
             terrainX1 = 800;
             terrainY1 = 200;
-            terrainH1 = 200;
+            terrainH1 = 150;
             terrainW1 = 100;
             terrainType1 = 2;
             drawTerrain(1, 2);
@@ -360,10 +340,211 @@ class Ball{
           terrainT2 = terrainY2 - (terrainH2 / 2);
           terrainB2 = terrainY2 + (terrainH2 / 2);
           
-        }  
+        }
+        
+        
+       if (level == 4){
+          int rand;
+          Random ran = new Random();
+          rand = ran.nextInt(2) + 1;
+          
+          //level 4 version 9
+          if (rand == 1){
+            version = 9;
+            setupStart(850.0, 750.0, 50, 50); 
             
+            setupWall(1, 100, 200, 125, 100);
+            setupWall(2, 400, 100, 150, 125);
+            setupWall(3, 750, 350, 150, 150);
+            drawWall(1);
+            drawWall(2);
+            drawWall(3);
+            
+            terrainX1 = 500;
+            terrainY1 = 500;
+            terrainH1 = 125;
+            terrainW1 = 125;
+            terrainType1 = 2;
+            drawTerrain(1,2); }
+            
+          //level 4 version 10  
+          if (rand == 2){
+            version = 10;
+            setupStart(50.0, 700.0, 800, 100);
+            
+            setupWall(1, 500, 75, 110, 130);
+            setupWall(2, 650, 200, 150, 125);
+            setupWall(3, 600, 600, 180, 180);
+            drawWall(1);
+            drawWall(2);
+            drawWall(3); 
+            
+            //water
+            originalX = 50.0;
+            originalY = 700.0;
+            terrainX1 = 350;
+            terrainY1 = 450;
+            terrainH1 = 150;
+            terrainW1 = 165;
+            terrainType1 = 3;
+            drawTerrain(1, 3); }
+            
+          terrainL1 = terrainX1 - (terrainW1 / 2);
+          terrainR1 = terrainX1 + (terrainW1 / 2);
+          terrainT1 = terrainY1 - (terrainH1 / 2);
+          terrainB1 = terrainY1 + (terrainH1 / 2); }
+          
+          
+       if (level == 5){
+          int rand;
+          Random ran = new Random();
+          rand = ran.nextInt(3) + 1;
+          
+          //level 5 version 11
+          if (rand == 1){
+            version = 11;
+            setupStart(50.0, 600.0, 800, 100);
+            setupWall(1, 300, 150, 150, 150);
+            setupWall(2, 450, 700, 175, 125);
+            setupWall(3, 600, 500, 200, 200);
+            setupWall(4, 750, 300, 135, 145);
+            drawWall(1);
+            drawWall(2);
+            drawWall(3);
+            drawWall(4);
+            
+            terrainX1 = 500;
+            terrainY1 = 250;
+            terrainH1 = 135;
+            terrainW1 = 150;
+            terrainType1 = 1;
+            drawTerrain(1,1); }
+            
+         //level 5 version 12
+         if (rand == 2){
+           version = 12;
+           setupStart(125.0, 500.0, 600, 100);
+           setupWall(1, 200, 200, 125, 125);
+           setupWall(2, 300, 500, 150, 150);
+           setupWall(3, 400, 300, 130, 140);
+           setupWall(4, 650, 700, 165, 175);
+           drawWall(1);
+           drawWall(2);
+           drawWall(3);
+           drawWall(4);
            
- }
+           originalX = 125.0;
+           originalY = 500.0;
+           terrainX1 = 700; 
+           terrainY1 = 250;
+           terrainH1 = 115;
+           terrainW1 = 125;
+           terrainType1 = 3;
+           drawTerrain(1,3); } 
+           
+         //level 5 version 13
+         if (rand == 3){
+           version = 13;
+           setupStart(125.0, 500.0, 600, 100);
+           setupWall(1, 250, 250, 125, 125);
+           setupWall(2, 350, 550, 150, 150);
+           setupWall(3, 450, 350, 130, 140);
+           setupWall(4, 700, 750, 165, 175);
+           drawWall(1);
+           drawWall(2);
+           drawWall(3);
+           drawWall(4);
+           
+           terrainX1 = 700;
+           terrainY1 = 250;
+           terrainH1 = 115;
+           terrainW1 = 125;
+           terrainType1 = 2;
+           drawTerrain(1,2); }
+           
+          terrainL1 = terrainX1 - (terrainW1 / 2);
+          terrainR1 = terrainX1 + (terrainW1 / 2);
+          terrainT1 = terrainY1 - (terrainH1 / 2);
+          terrainB1 = terrainY1 + (terrainH1 / 2);
+          
+       }
+       
+       
+       if (level == 6){
+          int rand;
+          Random ran = new Random();
+          rand = ran.nextInt(2) + 1;
+          
+          //level 6 version 14
+          if (rand == 1){
+            version = 14;
+            setupStart(50.0, 50.0, 750, 750);
+            setupWall(1, 150, 150, 175, 150);
+            setupWall(2, 750, 150, 125, 175);
+            setupWall(3, 600, 700, 150, 150);
+            setupWall(4, 750, 550, 175, 175);
+            drawWall(1);
+            drawWall(2);
+            drawWall(3);
+            drawWall(4);
+            
+            originalX = 50.0;
+            originalY = 50.0; 
+            terrainX1 = 450;
+            terrainY1 = 450;
+            terrainH1 = 145;
+            terrainW1 = 145;
+            terrainType1 = 3;
+            drawTerrain(1, 3);
+            
+            terrainX2 = 450;
+            terrainY2 = 700;
+            terrainH2 = 125;
+            terrainW2 = 135;
+            terrainType2 = 2;
+            drawTerrain(2, 2); }
+            
+         //level 6 version 15   
+         if (rand == 2){
+           version = 15;
+           setupStart(50.0, 50.0, 750, 750); 
+           setupWall(1, 150, 125, 125, 175);
+           setupWall(2, 300, 325, 125, 175);
+           setupWall(3, 600, 375, 125, 125);
+           setupWall(4, 200, 650, 150, 150);
+           drawWall(1);
+           drawWall(2);
+           drawWall(3);
+           drawWall(4); 
+            
+           terrainX1 = 500;
+           terrainY1 = 575;
+           terrainH1 = 130;
+           terrainW1 = 115;
+           terrainType1 = 1;
+           drawTerrain(1,1);
+           
+           terrainX2 = 675;
+           terrainY2 = 650;
+           terrainH2 = 130;
+           terrainW2 = 115;
+           terrainType2 = 2;
+           drawTerrain(2,2); }
+           
+           terrainL1 = terrainX1 - (terrainW1 / 2);
+           terrainR1 = terrainX1 + (terrainW1 / 2);
+           terrainT1 = terrainY1 - (terrainH1 / 2);
+           terrainB1 = terrainY1 + (terrainH1 / 2);
+          
+           terrainL2 = terrainX2 - (terrainW2 / 2);
+           terrainR2 = terrainX2 + (terrainW2 / 2);
+           terrainT2 = terrainY2 - (terrainH2 / 2);
+           terrainB2 = terrainY2 + (terrainH2 / 2);
+           
+     }
+     
+     
+   }
        
             
     public void draw(){
@@ -377,6 +558,9 @@ class Ball{
        drawWall(2);
        drawWall(3);
        drawWall(4);
+       drawWall(5);
+       drawWall(6);
+       drawWall(7);
        
        //drawTerrain(int number, int type)
        if (version == 1){
@@ -403,6 +587,30 @@ class Ball{
          
        if (version == 8){
          drawTerrain(1,2); }
+         
+       if (version == 9){
+         drawTerrain(1,2); }
+         
+       if (version == 10){
+         drawTerrain(1,3); }
+         
+       if (version == 11){
+         drawTerrain(1,1); }
+         
+       if (version == 12){
+         drawTerrain(1,3); }
+         
+       if (version == 13){
+         drawTerrain(1,2); }
+         
+       if (version == 14){
+         drawTerrain(1,3);
+         drawTerrain(2,2); }
+         
+       if (version == 15){
+         drawTerrain(1,1);
+         drawTerrain(2,2); } 
+         
        
        drawBall();
        
@@ -439,6 +647,14 @@ class Ball{
     int obsX5, obsY5, obsH5, obsW5, obsL5, obsR5, obsT5, obsB5; 
     int obsX6, obsY6, obsH6, obsW6, obsL6, obsR6, obsT6, obsB6; 
     int obsX7, obsY7, obsH7, obsW7, obsL7, obsR7, obsT7, obsB7; 
+   
+   
+    public void setupStart(float x, float y, int gx, int gy){
+      xcor = x;
+      ycor = y; 
+      goalX = gx;
+      goalY = gy; }
+      
    
     public void setupWall(int num, int x, int y, int h, int w){
       
