@@ -11,7 +11,9 @@ public void setup(){
    //Hover over Power and scroll to change the Power
    MyController = new ControlP5(this);
    MyController.addSlider("Power",0,40,power,20,100,10,100);
-   test.setup1(); }
+   test.setup(); 
+   
+}
    
 public void draw(){
   power=MyController.getController("Power").getValue();

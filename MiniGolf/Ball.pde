@@ -1,440 +1,646 @@
+import java.util.Random;
+
 class Ball{
-
-  //THINGS TO FIX:
-  //1 - KEEP TESTING VELOCITY TOLERANCE RANGE WHEN BALL ENTERS HOLE (IF TOO FAST, BALL WILL GO OVER);
-  //2 - FINE TUNE THE BALL'S INTERACTION WITH OBSTACLES
   
-  // 6/8 UPDATE
-  //3 - FINE TUNE BALL'S INTERACTION WITH TERRAIN
-  
-  //Level determination - to be used later for course generation
-  int level=1;
-  
-  //ball dimensions and stats 
-  float xcor, ycor, radius;
-  float xVelocity = 0.0, yVelocity = 0.0;
-  float topSpeed = 0.5; //for strokes
-  
-  //goal dimensions
-  float goalX, goalY, goalWidth;
- 
-  //display variables
-  int distance, speed;
-  int strokes = 0;
-  
-  //constructor
-  Ball(float r, float x, float y){
-    radius = r;
-    xcor = x;
-    ycor = y; } 
-  
-   // float friction (to be implemented later)
+    //Level determination - to be used later for course generation
+    int level = 1;
     
-   //default values - reset when ball reaches hole
-   public void setup(){
-    strokes = 0;
+    //ball dimensions and stats 
+    float xcor, ycor, radius;
+    float xVelocity = 0.0, yVelocity = 0.0;
+    float topSpeed = 0.1; //for strokes
     
-    xcor = 150.0;
-    ycor = 150.0;
-    xVelocity = 0.0;
-    yVelocity = 0.0; 
-    radius = 30.0;
-    
-    //sample hole
-    goalX = width/2;
-    goalY = height/2; 
-    goalWidth = 50.0;
-    
-    //sample wall obstacle
-    setupWall();
-    drawWall();
-    
-    //sample terrain
-    //terrain types 1 - elevation, 2 - depression, 3 - sand, 4 - water  
-    //setupTerrain(int number, int type, int size, int difficulty)
-    //drawTerrain(int number, int type, int shape)
-    
-    setupTerrain(1,1,2,3); 
-    drawTerrain(1,1,1); }
-    
-   public void displayDist(){
-     distance =  int(dist(xcor, ycor, goalX, goalY)); }
-     
-   public void displaySpeed(){
-     //true velocity formula
-      speed = int(sqrt( pow(xVelocity, 2) + pow(yVelocity, 2))); }
+    //goal dimensions
+    float goalX, goalY, goalWidth;
    
-   //semi random values - use general ranges
-   //this is velocity tolerance for hole
-   public boolean isSpeedValid(){
-    if (distance <= 200 && speed >= 30){
-        return false; }
-    return true; }
-   
-   //most important function
-   public void moveBall(){
-    float xpos =xcor + (xVelocity);
-    float ypos =ycor + (yVelocity);
-    xcor += xVelocity;
-    ycor += yVelocity; 
+    //display variables
+    int distance, speed;
+    int strokes = 0;
+    int totalStrokes = 0;
+    int version; 
     
-    xVelocity *= 0.97; //placeholder value for friction... higher value means less friction
-    yVelocity *= 0.97; 
+    //for water terrain
+    float originalX, originalY;
     
-    //tolerance value for ball in hole
-    //Added Power to determine if ball is going to fast
-    if ( dist(xcor, ycor, goalX, goalY) < (radius +goalWidth) * 0.5 && isSpeedValid()){
-      setup(); //for testing purposes only, we'll progress levels later
-      level+=1; }
-      
-    //bounce off walls  
-    if (xpos >= width - radius || xpos <= radius){
-          //placeholder values
-          xVelocity = xVelocity * -.95; }
-    if (ypos >= height-radius || ypos <= radius){
-          yVelocity= yVelocity * -.95; }
-        
-    //work on bouncing off wall/obstacle
-    if ((xpos <= obsX1 + obsWid1 && xpos >= obsX1) && (ypos <= obsY1 + obsHeight1 && ypos >= obsY1)){
-      xVelocity *= -.95; 
-      yVelocity *= -.95; }    
-      
-      
-    //INTERACTION WITH TERRAIN
+    //constructor
+    Ball(float r, float x, float y){
+      radius = r;
+      xcor = x;
+      ycor = y; } 
     
-    //BUG - THIS ONLY WORKS FOR RECTANLES, ADJUST FOR CIRCLES LATER
-    //BUG - *** Ball gets affcted even though it's not touching terrain, work on adjusting coordinates later
-    if ((xpos <= terrainX1 + terrainWid1 && xpos >= terrainX1) && 
-      (ypos <= terrainY1 + terrainHeight1 && ypos >= terrainY1)){
-        
-        //elevation - continually reverses ball's velocity (speeds down, then speeds up other way)
-        //this has many bugs, WORK ON COMPLETELY REVERSING BALL'S DIRECTION RATHER THAN DEFLECTING
+     //float friction (to be implemented later if wanted)
+      
+     //displaying
+     public void displayDist(){
+       distance =  int(dist(xcor, ycor, goalX, goalY)); }
+       
+     public void displaySpeed(){
+       //true velocity formula
+        speed = int(sqrt( pow(xVelocity, 2) + pow(yVelocity, 2))); }
      
+     //this is velocity tolerance for hole
+     public boolean isSpeedValid(){
+      if (distance <= 200 && speed >= 30){
+          return false; }
+      return true; }
+      
+     //most important function
+     public void moveBall(){
+      xcor += xVelocity;
+      ycor += yVelocity; 
+      
+      xVelocity *= 0.97; //placeholder value for friction... higher value means less friction
+      yVelocity *= 0.97; 
+      
+      //this determines whether ball is in hole or not
+      //Added Power to determine if ball is going to fast
+      if ( ((dist(xcor, ycor, goalX, goalY) < (radius +goalWidth) * 0.5)) && isSpeedValid()){
+        level += 1;
+        xVelocity = 0.0;
+        yVelocity = 0.0;
+        setup(); }
         
-        if (terrainType1 == 1){
+      //bounce off edges  
+      if (xcor >= width - radius || xcor <= radius){
+            xVelocity *= -.95; }
+      if (ycor >= height-radius || ycor <= radius){
+            yVelocity *= -.95; }
+          
+      //bouncing off walls    
+      if ( 
+               
+          ( (xcor > obsL1 && xcor < obsR1) && (ycor > obsT1 && ycor < obsB1) ) ||
+          ( (xcor > obsL2 && xcor < obsR2) && (ycor > obsT2 && ycor < obsB2) ) ||
+          ( (xcor > obsL3 && xcor < obsR3) && (ycor > obsT3 && ycor < obsB3) ) ||
+          ( (xcor > obsL4 && xcor < obsR4) && (ycor > obsT4 && ycor < obsB4) ) ||
+          ( (xcor > obsL5 && xcor < obsR5) && (ycor > obsT5 && ycor < obsB5) ) ||
+          ( (xcor > obsL6 && xcor < obsR6) && (ycor > obsT6 && ycor < obsB6) ) ||
+          ( (xcor > obsL7 && xcor < obsR7) && (ycor > obsT7 && ycor < obsB7) ) ){
+          
+        xVelocity *= -.95; 
+        yVelocity *= -.95; }    
+        
+        
+      //INTERACTION WITH TERRAIN
+      
+      if ( 
+          
+          ( (xcor > terrainL1 && xcor < terrainR1) && (ycor > terrainT1 && ycor < terrainB1) ) ||
+          ( (xcor > terrainL2 && xcor < terrainR2) && (ycor > terrainT2 && ycor < terrainB2) ) ||
+          ( (xcor > terrainL3 && xcor < terrainR3) && (ycor > terrainT3 && ycor < terrainB3) ) ||
+          ( (xcor > terrainL4 && xcor < terrainR4) && (ycor > terrainT4 && ycor < terrainB4) ) ||
+          ( (xcor > terrainL5 && xcor < terrainR5) && (ycor > terrainT5 && ycor < terrainB5) ) ||
+          ( (xcor > terrainL6 && xcor < terrainR6) && (ycor > terrainT6 && ycor < terrainB6) ) ||
+          ( (xcor > terrainL7 && xcor < terrainR7) && (ycor > terrainT7 && ycor < terrainB7) ) ){
+               
+               
+          //depression - adds a boost to ball's speed
+          //should work fine, but sometimes ball accelerates even when it's not in the terrain
+          if (terrainType1 == 1){
+            xVelocity *= 1 + (0.1);
+            yVelocity *= 1 + (0.1);  }
+          
+          
+          //sand - slows down ball until speed is 0
+          //works fine
+          if (terrainType1 == 2){
+            if (xVelocity > 0){
+              xVelocity -= 1; }
+            else{
+              xVelocity = 0; }
+              
+            if (yVelocity > 0){
+              yVelocity -= 1; }
+            else{
+               yVelocity = 0; }
+          }
+          
+          
+          //water resets the ball's original coordinates
+          //works fine
+          if (terrainType1 == 3){
+            xcor = originalX;
+            ycor = originalY;
+            xVelocity = 0.0;
+            yVelocity = 0.0; 
+            radius = 30.0; }
+         }
          
-          //if ball is well inside the hill and not fast enough, reverse direction   
-          if ((xpos <= terrainX1 + terrainWid1 - terrainWid1/4.0 && xpos >= terrainX1 + terrainWid1/4.0) && 
-              (ypos <= terrainY1 + terrainHeight1 - terrainHeight1/4.0 && ypos >= terrainY1 + terrainHeight1/4)){
-                
-                //placeholder value for "min" speed to go over hill
-                if (speed <= 15){
-                  xVelocity *= -.95;
-                  yVelocity *= -.95; }
+    }
+    
+    public void drawBall(){
+       fill(255);
+       noStroke();
+       ellipse(xcor, ycor, radius, radius); }
+       
+       
+    //RANDOM COURSE GENERATOR
+     public void setup(){
+      strokes = 0;
+      xVelocity = 0.0;
+      yVelocity = 0.0; 
+      radius = 30.0;
+      goalWidth = 50.0;
+      
+     if (level == 1){ 
+      int rand;
+      Random ran = new Random();
+      rand = ran.nextInt(4) + 1;
+      
+      rectMode(CENTER);
+      //level 1 version 1
+      if (rand == 1){
+        version = 1;
+        xcor = 150.0;
+        ycor = 150.0;
+        goalX = width/2;
+        goalY = height/2; 
+      
+        //wall and sand
+        setupWall(1, 600, 300, 50, 75); 
+        drawWall(1); 
+        
+        terrainX1 = 300;
+        terrainY1 = 300;
+        terrainH1 = 100;
+        terrainW1 = 125;
+        terrainType1 = 2;
+        drawTerrain(1,2); }   
+        
+     //level 1 version 2
+     if (rand == 2){
+         version = 2;
+         xcor = 150.0; 
+         ycor = 675.0; 
+         goalX = 750.0;
+         goalY = 75.0;
+         
+         originalX = 150.0;
+         originalY = 675.0; 
+         
+         //wall and water
+         setupWall(1, 725, 150, 90, 75); 
+         drawWall(1);
+         
+         terrainX1 = height/2;
+         terrainY1 =  width/2 - 200;
+         terrainH1 = 200;
+         terrainW1 = 250;
+         terrainType1 = 3;
+         drawTerrain(1, 3); }
+       
+      //level 1 version 3 
+      if (rand == 3){
+          version = 3;
+          xcor = 50.0;
+          ycor = 50.0;
+          goalX = 700.0;
+          goalY = 700.0;
+          
+          //wall and depression  
+          setupWall(1, height/2 + 50, width/2 + 50, 200, 200);
+          drawWall(1);
+          
+          terrainX1 = 700;
+          terrainY1 = 500;
+          terrainH1 = 100;
+          terrainW1 = 130; 
+          terrainType2 = 1;
+          drawTerrain(1, 1); }
+          
+       //level 1 version 4 
+      if (rand == 4){
+          version = 4;
+          xcor = 100.0;
+          ycor = 100.0;
+          goalX = 700.0;
+          goalY = 100.0;
+          
+          //wall and sand
+          setupWall(1, 700, 200, 100, 130);
+          drawWall(1);
+          
+          terrainX1 = 400;
+          terrainY1 = 50;
+          terrainH1 = 150;
+          terrainW1 = 115;
+          terrainType1 = 2;
+          drawTerrain(1, 2); }
+     }
+     
+       if (level == 2){
+          
+        int rand;
+        Random ran = new Random();
+        rand = ran.nextInt(2) + 1;
+        
+        //level 2 version 5
+        if (rand == 1){
+          version = 5;
+          xcor = 50.0;
+          ycor = 50.0;
+          goalX = 450;
+          goalY = 350; 
+        
+          //wall and sand
+          setupWall(1, 300, 150, 125, 120);
+          /** obsX1 = 300;
+          obsY1 = 150;
+          obsH1 = 125;
+          obsW1 = 120;
+          obsL1 = obsX1 - (obsW1 / 2);
+          obsR1 = obsX1 + (obsW1 / 2);
+          obsT1 = obsY1 - (obsH1 / 2);
+          obsB1 = obsY1 + (obsH1 / 2);
+         // setupWall(2, 125, 175, 600, 125); */
+          drawWall(1); 
+          //drawWall(2); 
+          
+          terrainX1 = 400;
+          terrainY1 = 425;
+          terrainH1 = 125;
+          terrainW1 = 150;
+          terrainType1 = 2; 
+          drawTerrain(1,2); }
+          
+          if (rand == 2){
+            version = 6;
+            xcor = 50.0;
+            ycor = 50.0;
+            goalX = 450;
+            goalY = 350; 
             
-           }
+            setupWall(1, 150, 0, 100, 150);
+            /** obsX1 = 150;
+            obsY1 = 0;
+            obsH1 = 100;
+            obsW1 = 700;
+            obsL1 = obsX1 - (obsW1 / 2);
+            obsR1 = obsX1 + (obsW1 / 2);
+            obsT1 = obsY1 - (obsH1 / 2);
+            obsB1 = obsY1 + (obsH1 / 2); */
+            drawWall(1);
+            
+          
+            terrainX1 = 300;
+            terrainY1 = 50;
+            terrainH1 = 200;
+            terrainW1 = 300;
+            terrainType1 = 2;
+            drawTerrain(1,2); }
+            
+          }  
            
-           else{
-              //keep slowing down until you reach top of hill
-              if (xVelocity > 0){
-                xVelocity -= terrainMod1; }
-                
-              if (yVelocity > 0){
-                yVelocity -= terrainMod1; }
-            }
-    
-        }
-             
-        //depression - adds a boost to ball's speed
-        //should work fine, but sometimes ball accelerates even when it's not in the terrain
-        if (terrainType1 == 2){
-          xVelocity *= 1 + (0.1 * terrainMod1);
-          yVelocity *= 1 + (0.1 * terrainMod1);  }
-        
-        //sand - slows down ball until speed is 0
-        //works fine
-        if (terrainType1 == 3){
-          if (xVelocity > 0){
-            xVelocity -= terrainMod1; }
-          else{
-            xVelocity = 0; }
+          terrainL1 = terrainX1 - (terrainW1 / 2);
+          terrainR1 = terrainX1 + (terrainW1 / 2);
+          terrainT1 = terrainY1 - (terrainH1 / 2);
+          terrainB1 = terrainY1 + (terrainH1 / 2); }
+       
             
-          if (yVelocity > 0){
-            yVelocity -= terrainMod1; }
-          else{
-             yVelocity = 0; }
-        }
-        
-        //water resets the ball's original coordinates
-        //works fine
-        if (terrainType1 == 4){
-          xcor = 150.0;
-          ycor = 150.0;
-          xVelocity = 0.0;
-          yVelocity = 0.0; 
-          radius = 30.0; }
-       }
+    public void draw(){
+       background(50,205,50);
+       moveBall();
        
-   }
-  
-  public void drawBall(){
-     fill(255);
-     noStroke();
-     ellipse(xcor, ycor, radius, radius); }
-     
-     
-    
-  public void draw(){
-     background(50,205,50);
-     moveBall();
-     
-     fill (120, 120, 120); //this is the hole
-     ellipse(goalX, goalY, goalWidth, goalWidth); //sample hole
-     
-     drawWall();
-     
-     //drawTerrain(int number, int type, int shape)
-     drawTerrain(1,1,1);
-     
-     drawBall();
-     
-     text("Strokes: " + strokes, 25, 25); //display stroke count
-     text("Level: " + level, 25, 50); //display stroke count
-     text("Distance to Goal: " + distance, 25, 75); //for testing purposes
-     text("Ball Speedometer: " + speed, 25, 100); //for testing purposes
-  }
-      
-  public void mousePressed(float power){
-        
-      if (mousePressed == true){
-        float currentSpeed = dist(0.0, 0.0, xVelocity, yVelocity);
-        if (currentSpeed > topSpeed){
-          return; }
-        strokes += 1;  //update stroke count
-      
-        float angleToMouse = atan2(pmouseY - ycor, pmouseX - xcor);
-        float ballSpeed = power; 
-        xVelocity = cos(angleToMouse) * ballSpeed;
-        yVelocity = sin(angleToMouse) * ballSpeed; }
-  }
-  
-  //To be used in Obstacle and Course ge
- 
-  /** to be implemented later
-  public int getFriction(){
-      return friction;  }
-      
-   public void setFriction(int x){
-       friction = x; } */ 
+       fill (120, 120, 120); //this is the hole
+       ellipse(goalX, goalY, goalWidth, goalWidth); 
        
-   //instance variables for osbtacle
-  int obstacleType = 0; //default 0 is brick wall
-  int obsX1, obsY1, obsHeight1, obsWid1;
-  int obsX2, obsY2, obsHeight2, obsWid2;
-  int obsX3, obsY3, obsHeight3, obsWid3;
-  int obsX4, obsY4, obsHeight4, obsWid4;
-  int obsX5, obsY5, obsHeight5, obsWid5;
-  int obsX6, obsY6, obsHeight6, obsWid6;
-  int obsX7, obsY7, obsHeight7, obsWid7;
- 
-  //default values, add parameters later
-  public void setupWall(){
-   obsX1 = 375;
-   obsY1 = 300;
-   obsHeight1 = 50;
-   obsWid1 = 65; }
-  
-  public void drawWall(){
-    fill(220,20,60); //crimson
-    noStroke();
-    rect(obsX1,obsY1,obsHeight1,obsWid1); }    
-  
-  //general values
-  //we can fix this later but make friction/slope adjustable as level progresses
-  //"mod" variable refers to how it modifies ball's velocity; we'll work on this later after testing some default values
-  //type refers to terrain type
-  int terrainX1, terrainY1, terrainHeight1, terrainWid1, terrainMod1, terrainType1; //refers to each instance of a terrain
-  int terrainX2, terrainY2, terrainHeight2, terrainWid2, terrainMod2, terrainType2;
-  int terrainX3, terrainY3, terrainHeight3, terrainWid3, terrainMod3, terrainType3;
-  int terrainX4, terrainY4, terrainHeight4, terrainWid4, terrainMod4, terrainType4;
-  int terrainX5, terrainY5, terrainHeight5, terrainWid5, terrainMod5, terrainType5;
-  int terrainX6, terrainY6, terrainHeight6, terrainWid6, terrainMod6, terrainType6;
-  int terrainX7, terrainY7, terrainHeight7, terrainWid7, terrainMod7, terrainType7;
- 
- 
-  //number refers to the instance of the terrain
-  //type refers to type of terrain
-  //for size -> 1 - small, 2 - medium, 3 - large
-  //the higher the difficulty, the more it will affect the ball's velocity
-  public void setupTerrain(int number, int type, int size, int difficulty){
-  
-      //default values to be adjusted later
-      if (number == 1){
-        terrainX1 = 200;
-        terrainY1 = 200;
-        terrainHeight1 = 35 * size;
-        terrainWid1 = 45 * size;
-        terrainMod1 = difficulty; //1 - easy, 2 - medium, 3 - hard;
-        terrainType1 = type; }
-        
-      if (number == 2){
-        terrainX2 = 200;
-        terrainY2 = 200;
-        terrainHeight2 = 35 * size;
-        terrainWid2 = 45 * size;
-        terrainMod2 = difficulty; 
-        terrainType2 = type; }
-        
-      if (number == 3){
-        terrainX3 = 200;
-        terrainY3 = 200;
-        terrainHeight3 = 35 * size;
-        terrainWid3 = 45 * size;
-        terrainMod3 = difficulty; 
-        terrainType3 = type; }
-        
-      if (number == 4){
-        terrainX4 = 200;
-        terrainY4 = 200;
-        terrainHeight4 = 35 * size;
-        terrainWid4 = 45 * size;
-        terrainMod4 = difficulty; 
-        terrainType4 = type; }
-        
-      if (number == 5){
-        terrainX5 = 200;
-        terrainY5 = 200;
-        terrainHeight5 = 35 * size;
-        terrainWid5 = 45 * size;
-        terrainMod5 = difficulty; 
-        terrainType5 = type; }
-        
-      if (number == 6){
-        terrainX6 = 200;
-        terrainY6 = 200;
-        terrainHeight6 = 100 * size;
-        terrainWid6 = 125 * size;
-        terrainMod6 = difficulty; 
-        terrainType6 = type; }
-        
-      if (number == 7){
-        terrainX7 = 200;
-        terrainY7 = 200;
-        terrainHeight7 = 35 * size;
-        terrainWid7 = 45 * size;
-        terrainMod7 = difficulty; 
-        terrainType7 = type; }
-        
-  }
-        
-  //velocity will be affected in the ball's move function
-   
-  //terrain types 1 - elevation(dark green), 2 - depression(light green), 3 - sand, 4 - water    
-  //for shape -> 1 - ellipse, 2 - rect (basic shapes, add more later)   
-  public void drawTerrain(int number, int type, int shape){
-    
-     if (type == 1){
-        //dark green
-        fill(0,100,0); }
-        
-      if (type == 2){
-        //light green
-        fill(144,238,144); }
-        
-      if (type == 3){
-        //golden
-        fill(218,165,32); }
-        
-      if (type == 4){
-        //blue
-        fill(72, 209, 204); }
-        
-    if (shape == 1){
-      noStroke();
-      if (number == 1){
-        rect(terrainX1, terrainY1, terrainHeight1, terrainWid1); }
-      if (number == 2){
-        rect(terrainX2, terrainY2, terrainHeight2, terrainWid2); }
-      if (number == 3){
-        rect(terrainX3, terrainY3, terrainHeight3, terrainWid3); }
-      if (number == 4){
-        rect(terrainX4, terrainY4, terrainHeight4, terrainWid4); }
-      if (number == 5){
-        rect(terrainX5, terrainY5, terrainHeight5, terrainWid5); }
-      if (number == 6){
-        rect(terrainX6, terrainY6, terrainHeight6, terrainWid6); }
-      if (number == 7){
-        rect(terrainX7, terrainY7, terrainHeight7, terrainWid7); }
-    }
-    
-    if (shape == 2){
-      noStroke();
-      if (number == 1){
-        ellipse(terrainX1, terrainY1, terrainHeight1, terrainWid1); }
-      if (number == 2){
-        ellipse(terrainX2, terrainY2, terrainHeight2, terrainWid2); }
-      if (number == 3){
-        ellipse(terrainX3, terrainY3, terrainHeight3, terrainWid3); }
-      if (number == 4){
-        ellipse(terrainX4, terrainY4, terrainHeight4, terrainWid4); }
-      if (number == 5){
-        ellipse(terrainX5, terrainY5, terrainHeight5, terrainWid5); }
-      if (number == 6){
-        ellipse(terrainX6, terrainY6, terrainHeight6, terrainWid6); }
-      if (number == 7){
-        ellipse(terrainX7, terrainY7, terrainHeight7, terrainWid7); }
-    }
-  
-   }
-   
-   
-   //BEGIN RANDOM COURSE GENERATOR - LEVEL 1
-   public void setup1(){
-    strokes = 0;
-    xVelocity = 0.0;
-    yVelocity = 0.0; 
-    radius = 30.0;
-    goalWidth = 50.0;
-    
-    int rand;
-    rand = int(random(0,5)); //4 possible ways
-    
-    //just some random values
-    if (rand == 0){
-      xcor = 150.0;
-      ycor = 150.0;
-      goalX = width/2;
-      goalY = height/2; }
-      
-    if (rand == 1){
-      xcor = 450.0;
-      ycor = 450.0;
-      goalX = 50.0;
-      goalY = 50.0; }
-      
-    if (rand == 2){
-      xcor = 450.0;
-      ycor = 150.0;
-      goalX = 25.0;
-      goalY = 600.0; }
-      
-    if (rand == 3){
-      xcor = 150.0;
-      ycor = 450.0; 
-      goalX = width/2 + 300;
-      goalY = height/2 + 300; }
-      
-    
-  
-    goalX = width/2;
-    goalY = height/2; 
-    
-    
-    
-    //sample wall obstacle
-    setupWall();
-    drawWall();
-    
-    //sample terrain
-    //terrain types 1 - elevation, 2 - depression, 3 - sand, 4 - water  
-    //setupTerrain(int number, int type, int size, int difficulty)
-    //drawTerrain(int number, int type, int shape)
-    
-    setupTerrain(1,1,2,3); 
-    drawTerrain(1,1,1); }
-    
-   
-   
-   
+       drawWall(1);
+       drawWall(2);
+       drawWall(3);
+       drawWall(4);
+       
+       //drawTerrain(int number, int type)
+       if (version == 1){
+         drawTerrain(1,2); }
+         
+       if (version == 2){
+         drawTerrain(1,3); }
+         
+       if (version == 3){
+         drawTerrain(1,1); }
+         
+       if (version == 4){
+         drawTerrain(1,2); }
+         
+       if (version == 5){
+         drawTerrain(1,2); }
+         
+       if (version == 6){
+         drawTerrain(1,2); }
+       
+       drawBall();
+       
+       text("Strokes: " + strokes, 25, 25); //display stroke count
+       text("Total Strokes: " + totalStrokes, 125, 25); //display total strokes
+       text("Level: " + level, 25, 50); //display stroke count
+       text("Version: " + version, 25, 75); //display version of level
+       text("Distance to Goal: " + distance, 25, 100); //for testing purposes
+       text("Ball Speedometer: " + speed, 25, 125); //for testing purposes
 
+    }
+        
+   public void mousePressed(float power){
+          
+        if (mousePressed == true){
+          float currentSpeed = dist(0.0, 0.0, xVelocity, yVelocity);
+          if (currentSpeed > topSpeed){
+            return; }
+          strokes += 1;  //update stroke count
+          totalStrokes += 1; //update total stroke count
+        
+          float angleToMouse = atan2(pmouseY - ycor, pmouseX - xcor);
+          float ballSpeed = power; 
+          xVelocity = cos(angleToMouse) * ballSpeed;
+          yVelocity = sin(angleToMouse) * ballSpeed; }
+    }
+    
+    //obstacle variables     
+    int obstacleType = 0; //default 0 is brick wall, we'll add more if we have time
+    int obsX1, obsY1, obsH1, obsW1, obsL1, obsR1, obsT1, obsB1;
+    int obsX2, obsY2, obsH2, obsW2, obsL2, obsR2, obsT2, obsB2; 
+    int obsX3, obsY3, obsH3, obsW3, obsL3, obsR3, obsT3, obsB3; 
+    int obsX4, obsY4, obsH4, obsW4, obsL4, obsR4, obsT4, obsB4; 
+    int obsX5, obsY5, obsH5, obsW5, obsL5, obsR5, obsT5, obsB5; 
+    int obsX6, obsY6, obsH6, obsW6, obsL6, obsR6, obsT6, obsB6; 
+    int obsX7, obsY7, obsH7, obsW7, obsL7, obsR7, obsT7, obsB7; 
+   
+    public void setupWall(int num, int x, int y, int h, int w){
+      
+      rectMode(CENTER);
+      
+      if (num == 1){
+        obsX1 = x;
+        obsY1 = y;
+        obsH1 = h;
+        obsW1 = w; 
+        obsL1 = x - (w/2);
+        obsR1 = x + (w/2);
+        obsT1 = y - (h/2);
+        obsB1 = y + (h/2); } 
+        
+      if (num == 2){
+        obsX2 = x;
+        obsY2 = y;
+        obsH2 = h;
+        obsW2 = w; 
+        obsL2 = x - (w/2);
+        obsR2 = x + (w/2);
+        obsT2 = y - (h/2);
+        obsB2 = y + (h/2); } 
+        
+      if (num == 3){
+        obsX3 = x;
+        obsY3 = y;
+        obsH3 = h;
+        obsW3 = w; 
+        obsL3 = x - (w/2);
+        obsR3 = x + (w/2);
+        obsT3 = y - (h/2);
+        obsB3 = y + (h/2); } 
+        
+      if (num == 4){
+        obsX4 = x;
+        obsY4 = y;
+        obsH4 = h;
+        obsW4 = w;
+        obsL4 = x - (w/2);
+        obsR4 = x + (w/2);
+        obsT4 = y - (h/2);
+        obsB4 = y + (h/2); } 
+        
+      if (num == 5){
+        obsX5 = x;
+        obsY5 = y;
+        obsH5 = h;
+        obsW5 = w; 
+        obsL5 = x - (w/2);
+        obsR5 = x + (w/2);
+        obsT5 = y - (h/2);
+        obsB5 = y + (h/2); } 
+        
+      if (num == 6){
+        obsX6 = x;
+        obsY6 = y;
+        obsH6 = h;
+        obsW6 = w; 
+        obsL6 = x - (w/2);
+        obsR6 = x + (w/2);
+        obsT6 = y - (h/2);
+        obsB6 = y + (h/2); } 
+        
+      if (num == 7){
+        obsX7 = x;
+        obsY7 = y;
+        obsH7 = h;
+        obsW7 = w; 
+        obsL7 = x - (w/2);
+        obsR7 = x + (w/2);
+        obsT7 = y - (h/2);
+        obsB7 = y + (h/2); }
+      
+    }
+      
+    public void drawWall(int number){
+     fill(220,20,60); //crimson
+     noStroke();
+     rectMode(CENTER);
+     if (number == 1){
+       rect(obsX1, obsY1, obsH1, obsW1); }
+     if (number == 2){
+       rect(obsX2, obsY2, obsH2, obsW2); }
+     if (number == 3){
+       rect(obsX3, obsY3, obsH3, obsW3); }
+     if (number == 4){
+       rect(obsX4, obsY4, obsH4, obsW4); }
+     if (number == 5){
+       rect(obsX5, obsY5, obsH5, obsW5); }
+     if (number == 6){
+       rect(obsX6, obsY6, obsH6, obsW6); }
+     if (number == 7){
+       rect(obsX7, obsY7, obsH7, obsW7); }
+     }
+     
+    
+    //terrain variables
+    int terrainX1, terrainY1, terrainH1, terrainW1, terrainType1, terrainL1, terrainR1, terrainT1, terrainB1; 
+    int terrainX2, terrainY2, terrainH2, terrainW2, terrainType2, terrainL2, terrainR2, terrainT2, terrainB2;
+    int terrainX3, terrainY3, terrainH3, terrainW3, terrainType3, terrainL3, terrainR3, terrainT3, terrainB3;
+    int terrainX4, terrainY4, terrainH4, terrainW4, terrainType4, terrainL4, terrainR4, terrainT4, terrainB4;
+    int terrainX5, terrainY5, terrainH5, terrainW5, terrainType5, terrainL5, terrainR5, terrainT5, terrainB5;
+    int terrainX6, terrainY6, terrainH6, terrainW6, terrainType6, terrainL6, terrainR6, terrainT6, terrainB6;
+    int terrainX7, terrainY7, terrainH7, terrainW7, terrainType7, terrainL7, terrainR7, terrainT7, terrainB7;
+   
+   
+    // 1 - depression(light green), 2 - sand, 3 - water    
+    // for shape -> 1 - rect, if we have more time we'll add more shapes later rect
+    public void drawTerrain(int number, int type){
+          
+        if (type == 1){
+          //light green
+          fill(144,238,144); }
+          
+        if (type == 2){
+          //golden
+          fill(218,165,32); }
+          
+        if (type == 3){
+          //blue
+          fill(72, 209, 204); }
+        
+        noStroke();
+        rectMode(CENTER);
+        if (number == 1){
+          rect(terrainX1, terrainY1, terrainH1, terrainW1); }
+        if (number == 2){
+          rect(terrainX2, terrainY2, terrainH2, terrainW2); }
+        if (number == 3){
+          rect(terrainX3, terrainY3, terrainH3, terrainW3); }
+        if (number == 4){
+          rect(terrainX4, terrainY4, terrainH4, terrainW4); }
+        if (number == 5){
+          rect(terrainX5, terrainY5, terrainH5, terrainW5); }
+        if (number == 6){
+          rect(terrainX6, terrainY6, terrainH6, terrainW6); }
+        if (number == 7){
+          rect(terrainX7, terrainY7, terrainH7, terrainW7); }
+    
+     }
+     
+     /** public void resetObstacleTerrain(){
+       obsX1 = 0;
+       obsY1 = 0;
+       obsH1 = 0;
+       obsW1 = 0;
+       obsL1 = 0;
+       obsR1 = 0;
+       obsT1 = 0;
+       obsB1 = 0;
+       
+       obsX2 = 0;
+       obsY2 = 0;
+       obsH2 = 0;
+       obsW2 = 0;
+       obsL2 = 0;
+       obsR2 = 0;
+       obsT2 = 0;
+       obsB2 = 0;
+       
+       obsX3 = 0;
+       obsY3 = 0;
+       obsH3 = 0;
+       obsW3 = 0;
+       obsL3 = 0;
+       obsR3 = 0;
+       obsT3 = 0;
+       obsB3 = 0;
+       
+       obsX4 = 0;
+       obsY4 = 0;
+       obsH4 = 0;
+       obsW4 = 0;
+       obsL4 = 0;
+       obsR4 = 0;
+       obsT4 = 0;
+       obsB4 = 0;
+       
+       obsX5 = 0;
+       obsY5 = 0;
+       obsH5 = 0;
+       obsW5 = 0;
+       obsL5 = 0;
+       obsR5 = 0;
+       obsT5 = 0;
+       obsB5 = 0;
+       
+       obsX6 = 0;
+       obsY6 = 0;
+       obsH6 = 0;
+       obsW6 = 0;
+       obsL6 = 0;
+       obsR6 = 0;
+       obsT6 = 0;
+       obsB6 = 0;
+       
+       obsX7 = 0;
+       obsY7 = 0;
+       obsH7 = 0;
+       obsW7 = 0;
+       obsL7 = 0;
+       obsR7 = 0;
+       obsT7 = 0;
+       obsB7 = 0;
+       
+       terrainX1 = 0;
+       terrainY1 = 0;
+       terrainH1 = 0;
+       terrainW1 = 0;
+       terrainType1 = 0;
+       terrainL1 = 0;
+       terrainR1 = 0;
+       terrainT1 = 0;
+       terrainB1 = 0;
+       
+       terrainX2 = 0;
+       terrainY2 = 0;
+       terrainH2 = 0;
+       terrainW2 = 0;
+       terrainType2 = 0;
+       terrainL2 = 0;
+       terrainR2 = 0;
+       terrainT2 = 0;
+       terrainB2 = 0;
+       
+       terrainX3 = 0;
+       terrainY3 = 0;
+       terrainH3 = 0;
+       terrainW3 = 0;
+       terrainType3 = 0;
+       terrainL3 = 0;
+       terrainR3 = 0;
+       terrainT3 = 0;
+       terrainB3 = 0;
+       
+       terrainX4 = 0;
+       terrainY4 = 0;
+       terrainH4 = 0;
+       terrainW4 = 0;
+       terrainType4 = 0;
+       terrainL4 = 0;
+       terrainR4 = 0;
+       terrainT4 = 0;
+       terrainB4 = 0;
+       
+       terrainX5 = 0;
+       terrainY5 = 0;
+       terrainH5 = 0;
+       terrainW5 = 0;
+       terrainType5 = 0;
+       terrainL5 = 0;
+       terrainR5 = 0;
+       terrainT5 = 0;
+       terrainB5 = 0;
+       
+       terrainX6 = 0;
+       terrainY6 = 0;
+       terrainH6 = 0;
+       terrainW6 = 0;
+       terrainType6 = 0;
+       terrainL6 = 0;
+       terrainR6 = 0;
+       terrainT6 = 0;
+       terrainB6 = 0;
+       
+       terrainX7 = 0;
+       terrainY7 = 0;
+       terrainH7 = 0;
+       terrainW7 = 0;
+       terrainType7 = 0;
+       terrainL7 = 0;
+       terrainR7 = 0;
+       terrainT7 = 0;
+       terrainB7 = 0;
+       
+     } */
+   
+  
 }
