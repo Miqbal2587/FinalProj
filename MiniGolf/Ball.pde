@@ -120,12 +120,12 @@ class Ball{
           //sand - slows down ball until speed is 0
           //works fine
           if (terrainType1 == 2){
-            if (xVelocity > 0){
+            if (xVelocity > 1){
               xVelocity -= 1; }
             else{
               xVelocity = 0; }
               
-            if (yVelocity > 0){
+            if (yVelocity > 1){
               yVelocity -= 1; }
             else{
                yVelocity = 0; }
