@@ -80,9 +80,21 @@ class Ball{
           ( (xcor > obsL5 && xcor < obsR5) && (ycor > obsT5 && ycor < obsB5) ) ||
           ( (xcor > obsL6 && xcor < obsR6) && (ycor > obsT6 && ycor < obsB6) ) ||
           ( (xcor > obsL7 && xcor < obsR7) && (ycor > obsT7 && ycor < obsB7) ) ){
-          
-        xVelocity *= -.95; 
-        yVelocity *= -.95; }    
+          if (
+          ! ((xcor>obsL1) && xcor<obsR1) ||
+          ! ((xcor>obsL2) && xcor<obsR2) ||
+          ! ((xcor>obsL3) && xcor<obsR3) ||
+          ! ((xcor>obsL4) && xcor<obsR4) ||
+          ! ((xcor>obsL5) && xcor<obsR5) ||
+          ! ((xcor>obsL6) && xcor<obsR6) ||
+          ! ((xcor>obsL7) && xcor<obsR7)) {
+            xVelocity *= -.95; 
+            yVelocity *= .95;
+          }
+          else{
+            xVelocity *= .95; 
+            yVelocity *= -.95; }
+          }    
         
         
       //INTERACTION WITH TERRAIN
