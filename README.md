@@ -1,5 +1,5 @@
 #FinalProj 
-The gist: Use physics to create a 2D mini golf course. The player will use his or her knowledge of physics and control the ball’s velocity into the hole. Various obstacles and course dimensions will be generated semi randomly as each level progresses in relative difficulty. 
+The gist: Create a 2D mini golf course. The player will control the ball’s velocity into the hole. Various obstacles and course terrain will be generated semi randomly as each level progresses in relative difficulty. 
 
 Developmental log:
 
@@ -34,4 +34,9 @@ Made major strides today
 4) Begin working on new obstacle types
 5) Keep testing the terrains and debug anything if neccesary
 
+6/9 - 6/10: MAJOR UPDATE
+-Many original ideas had to be scrapped: more obstacle and terrain types, different terrain shapes
+-This was due to unexpected bugs that derailed the basic program. These bugs occured when large terrain sizes and obstacles were generated. Also, the ball had difficulty interacting with other shape types besides rectangle, which would destroy the purpose of the game
+-To the best of our ability, we can only now focus on generating simple levels with small terrains and walls. Our final commit will include a moderate batch of semi random levels. 
+-Things added: Level progression system, fixed weird bouncing with walls. The ball is still a little buggy when it bounces off the window edge
 
