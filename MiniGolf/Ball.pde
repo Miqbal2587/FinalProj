@@ -7,7 +7,7 @@ class Ball{
     //Make small obstacles and terrain for the levels
   
     //Level determination - to be used later for course generation
-    int level = 5;
+    int level = 1;
     
     //ball dimensions and stats 
     float xcor, ycor, radius;
@@ -62,6 +62,8 @@ class Ball{
         level += 1;
         xVelocity = 0.0;
         yVelocity = 0.0;
+        if (level == 9){
+          finalScreen(); }
         setup(); }
         
       //bounce off edges  
@@ -80,57 +82,250 @@ class Ball{
           ( (xcor > obsL5 && xcor < obsR5) && (ycor > obsT5 && ycor < obsB5) ) ||
           ( (xcor > obsL6 && xcor < obsR6) && (ycor > obsT6 && ycor < obsB6) ) ||
           ( (xcor > obsL7 && xcor < obsR7) && (ycor > obsT7 && ycor < obsB7) ) ){
-          else{
-            xVelocity *= -.95; 
-            yVelocity *= -.95; }
-          }    
+             xVelocity *= -.95; 
+             yVelocity *= -.95; }
+                 
         
         
       //INTERACTION WITH TERRAIN
       
-      if ( 
-          
-          ( (xcor > terrainL1 && xcor < terrainR1) && (ycor > terrainT1 && ycor < terrainB1) ) ||
-          ( (xcor > terrainL2 && xcor < terrainR2) && (ycor > terrainT2 && ycor < terrainB2) ) ||
-          ( (xcor > terrainL3 && xcor < terrainR3) && (ycor > terrainT3 && ycor < terrainB3) ) ||
-          ( (xcor > terrainL4 && xcor < terrainR4) && (ycor > terrainT4 && ycor < terrainB4) ) ||
-          ( (xcor > terrainL5 && xcor < terrainR5) && (ycor > terrainT5 && ycor < terrainB5) ) ||
-          ( (xcor > terrainL6 && xcor < terrainR6) && (ycor > terrainT6 && ycor < terrainB6) ) ||
-          ( (xcor > terrainL7 && xcor < terrainR7) && (ycor > terrainT7 && ycor < terrainB7) ) ){
-               
-               
-          //depression - adds a boost to ball's speed
-          //should work fine, but sometimes ball accelerates even when it's not in the terrain
-          if (terrainType1 == 1){
-            xVelocity *= 1 + (0.1);
-            yVelocity *= 1 + (0.1);  }
-          
-          
-          //sand - slows down ball until speed is 0
-          //works fine
-          if (terrainType1 == 2){
-            if (xVelocity > 1){
-              xVelocity -= 1; }
-            else{
-              xVelocity = 0; }
+      if ( (xcor > terrainL1 && xcor < terrainR1) && (ycor > terrainT1 && ycor < terrainB1) ){
+            //depression - adds a boost to ball's speed
+            //should work fine, but sometimes ball accelerates even when it's not in the terrain
+            if (terrainType1 == 1){
+              xVelocity *= 1 + (0.1);
+              yVelocity *= 1 + (0.1);  }
+            
+            
+            //sand - slows down ball until speed is 0
+            //works fine
+            if (terrainType1 == 2){
+              if (xVelocity > 0){
+                  xVelocity -= 1; }
+                else{
+                  xVelocity = 0; } 
               
-            if (yVelocity > 1){
-              yVelocity -= 1; }
-            else{
-               yVelocity = 0; }
-          }
-          
-          
-          //water resets the ball's original coordinates
-          //works fine
-          if (terrainType1 == 3){
-            xcor = originalX;
-            ycor = originalY;
-            xVelocity = 0.0;
-            yVelocity = 0.0; 
-            radius = 30.0; }
-         }
-         
+                
+              if (yVelocity > 1){
+                yVelocity -= 1; }
+              else{
+                 yVelocity = 0; }
+            }
+            
+            
+            //water resets the ball's original coordinates
+            //works fine
+            if (terrainType1 == 3){
+              xcor = originalX;
+              ycor = originalY;
+              xVelocity = 0.0;
+              yVelocity = 0.0; 
+              radius = 30.0; }
+           }
+           
+      if ( (xcor > terrainL2 && xcor < terrainR2) && (ycor > terrainT2 && ycor < terrainB2) ){
+            //depression - adds a boost to ball's speed
+            //should work fine, but sometimes ball accelerates even when it's not in the terrain
+            if (terrainType2 == 1){
+              xVelocity *= 1 + (0.1);
+              yVelocity *= 1 + (0.1);  }
+            
+            
+            //sand - slows down ball until speed is 0
+            //works fine
+            if (terrainType2 == 2){
+              if (xVelocity > 1){
+                xVelocity -= 1; }
+              else{
+                xVelocity = 0; }
+                
+              if (yVelocity > 1){
+                yVelocity -= 1; }
+              else{
+                 yVelocity = 0; }
+            }
+            
+            
+            //water resets the ball's original coordinates
+            //works fine
+            if (terrainType2 == 3){
+              xcor = originalX;
+              ycor = originalY;
+              xVelocity = 0.0;
+              yVelocity = 0.0; 
+              radius = 30.0; }
+           }
+           
+           
+      if ( (xcor > terrainL3 && xcor < terrainR3) && (ycor > terrainT3 && ycor < terrainB3) ){
+            //depression - adds a boost to ball's speed
+            //should work fine, but sometimes ball accelerates even when it's not in the terrain
+            if (terrainType3 == 1){
+              xVelocity *= 1 + (0.1);
+              yVelocity *= 1 + (0.1);  }
+            
+            
+            //sand - slows down ball until speed is 0
+            //works fine
+            if (terrainType3 == 2){
+              if (xVelocity > 1){
+                xVelocity -= 1; }
+              else{
+                xVelocity = 0; }
+                
+              if (yVelocity > 1){
+                yVelocity -= 1; }
+              else{
+                 yVelocity = 0; }
+            }
+            
+            
+            //water resets the ball's original coordinates
+            //works fine
+            if (terrainType3 == 3){
+              xcor = originalX;
+              ycor = originalY;
+              xVelocity = 0.0;
+              yVelocity = 0.0; 
+              radius = 30.0; }
+           }     
+           
+           
+      if ( (xcor > terrainL4 && xcor < terrainR4) && (ycor > terrainT4 && ycor < terrainB4) ){
+            //depression - adds a boost to ball's speed
+            //should work fine, but sometimes ball accelerates even when it's not in the terrain
+            if (terrainType4 == 1){
+              xVelocity *= 1 + (0.1);
+              yVelocity *= 1 + (0.1);  }
+            
+            
+            //sand - slows down ball until speed is 0
+            //works fine
+            if (terrainType4 == 2){
+              if (xVelocity > 1){
+                xVelocity -= 1; }
+              else{
+                xVelocity = 0; }
+                
+              if (yVelocity > 1){
+                yVelocity -= 1; }
+              else{
+                 yVelocity = 0; }
+            }
+            
+            
+            //water resets the ball's original coordinates
+            //works fine
+            if (terrainType4 == 3){
+              xcor = originalX;
+              ycor = originalY;
+              xVelocity = 0.0;
+              yVelocity = 0.0; 
+              radius = 30.0; }
+           }
+           
+           
+      if ( (xcor > terrainL5 && xcor < terrainR5) && (ycor > terrainT5 && ycor < terrainB5) ){
+            //depression - adds a boost to ball's speed
+            //should work fine, but sometimes ball accelerates even when it's not in the terrain
+            if (terrainType5 == 1){
+              xVelocity *= 1 + (0.1);
+              yVelocity *= 1 + (0.1);  }
+            
+            
+            //sand - slows down ball until speed is 0
+            //works fine
+            if (terrainType5 == 2){
+              if (xVelocity > 1){
+                xVelocity -= 1; }
+              else{
+                xVelocity = 0; }
+                
+              if (yVelocity > 1){
+                yVelocity -= 1; }
+              else{
+                 yVelocity = 0; }
+            }
+            
+            
+            //water resets the ball's original coordinates
+            //works fine
+            if (terrainType5 == 3){
+              xcor = originalX;
+              ycor = originalY;
+              xVelocity = 0.0;
+              yVelocity = 0.0; 
+              radius = 30.0; }
+           }
+           
+           
+       if ( (xcor > terrainL6 && xcor < terrainR6) && (ycor > terrainT6 && ycor < terrainB6) ){
+            //depression - adds a boost to ball's speed
+            //should work fine, but sometimes ball accelerates even when it's not in the terrain
+            if (terrainType6 == 1){
+              xVelocity *= 1 + (0.1);
+              yVelocity *= 1 + (0.1);  }
+            
+            
+            //sand - slows down ball until speed is 0
+            //works fine
+            if (terrainType6 == 2){
+              if (xVelocity > 1){
+                xVelocity -= 1; }
+              else{
+                xVelocity = 0; }
+                
+              if (yVelocity > 1){
+                yVelocity -= 1; }
+              else{
+                 yVelocity = 0; }
+            }
+            
+            
+            //water resets the ball's original coordinates
+            //works fine
+            if (terrainType6 == 3){
+              xcor = originalX;
+              ycor = originalY;
+              xVelocity = 0.0;
+              yVelocity = 0.0; 
+              radius = 30.0; }
+           }
+           
+    
+      if ( (xcor > terrainL7 && xcor < terrainR7) && (ycor > terrainT7 && ycor < terrainB7) ){
+            //depression - adds a boost to ball's speed
+            //should work fine, but sometimes ball accelerates even when it's not in the terrain
+            if (terrainType7 == 1){
+              xVelocity *= 1 + (0.1);
+              yVelocity *= 1 + (0.1);  }
+            
+            
+            //sand - slows down ball until speed is 0
+            //works fine
+            if (terrainType7 == 2){
+              if (xVelocity > 1){
+                xVelocity -= 1; }
+              else{
+                xVelocity = 0; }
+                
+              if (yVelocity > 1){
+                yVelocity -= 1; }
+              else{
+                 yVelocity = 0; }
+            }
+            
+            
+            //water resets the ball's original coordinates
+            //works fine
+            if (terrainType7 == 3){
+              xcor = originalX;
+              ycor = originalY;
+              xVelocity = 0.0;
+              yVelocity = 0.0; 
+              radius = 30.0; }
+           }
+     
     }
     
     public void drawBall(){
@@ -509,7 +704,7 @@ class Ball{
          if (rand == 2){
            version = 15;
            setupStart(50.0, 50.0, 750, 750); 
-           setupWall(1, 150, 125, 125, 175);
+           setupWall(1, 750, 500, 125, 175);
            setupWall(2, 300, 325, 125, 175);
            setupWall(3, 600, 375, 125, 125);
            setupWall(4, 200, 650, 150, 150);
@@ -540,9 +735,295 @@ class Ball{
            terrainL2 = terrainX2 - (terrainW2 / 2);
            terrainR2 = terrainX2 + (terrainW2 / 2);
            terrainT2 = terrainY2 - (terrainH2 / 2);
-           terrainB2 = terrainY2 + (terrainH2 / 2);
+           terrainB2 = terrainY2 + (terrainH2 / 2); }
            
-     }
+           
+       if (level == 7){
+         int rand;
+         Random ran = new Random();
+         rand = ran.nextInt(2) + 1;
+         
+         //level 7 version 16
+         if (rand == 1){
+           version = 16;
+           setupStart(50.0, 50.0, 750, 750); 
+           setupWall(1, 150, 125, 125, 175);
+           setupWall(2, 300, 250, 125, 175);
+           setupWall(3, 450, 375, 150, 150);
+           setupWall(4, 600, 500, 150, 150);
+           setupWall(5, 600, 750, 125, 125);
+           drawWall(1);
+           drawWall(2);
+           drawWall(3);
+           drawWall(4); 
+           drawWall(5);
+            
+           terrainX1 = 250;
+           terrainY1 = 600;
+           terrainH1 = 140;
+           terrainW1 = 115;
+           terrainType1 = 2;
+           drawTerrain(1,2);
+           
+           terrainX2 = 400;
+           terrainY2 = 600;
+           terrainH2 = 130;
+           terrainW2 = 135;
+           terrainType2 = 1;
+           drawTerrain(2,1); }
+           
+        //level 7 version 17   
+        if (rand == 2){
+          version = 17;
+          setupStart(750.0, 750.0, 75, 75);
+          setupWall(1, 250, 150, 125, 175);
+          setupWall(2, 150, 450, 125, 175);
+          setupWall(3, 575, 150, 150, 150);
+          setupWall(4, 675, 400, 150, 150);
+          setupWall(5, 750, 600, 150, 150);
+          drawWall(1);
+          drawWall(2);
+          drawWall(3);
+          drawWall(4); 
+          drawWall(5);
+          
+          terrainX1 = 500;
+          terrainY1 = 500;
+          terrainH1 = 115;
+          terrainW1 = 140;
+          terrainType1 = 1;
+          drawTerrain(1,1);
+          
+          terrainX2 = 350;
+          terrainY2 = 350;
+          terrainH2 = 135;
+          terrainW2 = 130;
+          terrainType2 = 2;
+          drawTerrain(2,2); }
+          
+        terrainL1 = terrainX1 - (terrainW1 / 2);
+        terrainR1 = terrainX1 + (terrainW1 / 2);
+        terrainT1 = terrainY1 - (terrainH1 / 2);
+        terrainB1 = terrainY1 + (terrainH1 / 2);
+          
+        terrainL2 = terrainX2 - (terrainW2 / 2);
+        terrainR2 = terrainX2 + (terrainW2 / 2);
+        terrainT2 = terrainY2 - (terrainH2 / 2);
+        terrainB2 = terrainY2 + (terrainH2 / 2); }
+        
+        
+      if (level == 8){
+         int rand;
+         Random ran = new Random();
+         rand = ran.nextInt(3) + 1;
+         
+         //level 8 version 18
+         if (rand == 1){
+           version = 18;
+           setupStart(50.0, 50.0, 750, 750);
+           setupWall(1, 175, 700, 125, 175);
+           setupWall(2, 240, 120, 125, 175);
+           setupWall(3, 475, 475, 150, 150);
+           setupWall(4, 625, 175, 150, 150);
+           setupWall(5, 750, 550, 150, 150);
+           drawWall(1);
+           drawWall(2);
+           drawWall(3);
+           drawWall(4); 
+           drawWall(5);
+           
+           originalX = 50.0;
+           originalY = 50.0;
+           
+           terrainX1 = 400;
+           terrainY1 = 650;
+           terrainH1 = 125;
+           terrainW1 = 145;
+           terrainType1 = 3;
+           drawTerrain(1,3);
+           
+           terrainX2 = 300;
+           terrainY2 = 375;
+           terrainH2 = 145;
+           terrainW2 = 140;
+           terrainType2 = 2;
+           drawTerrain(2,2);
+           
+           terrainX3 = 700;
+           terrainY3 = 375;
+           terrainH3 = 125;
+           terrainW3 = 140;
+           terrainType3 = 1;
+           drawTerrain(3,1); }
+           
+         //level 8 version 19  
+         if (rand == 2){
+           version = 19;
+           setupStart(750.0, 750.0, 50, 50);
+           setupWall(1, 120, 750, 175, 125);
+           setupWall(2, 240, 120, 175, 125);
+           setupWall(3, 150, 425, 125, 175);
+           setupWall(4, 625, 175, 125, 175);
+           setupWall(5, 750, 550, 150, 150);
+           drawWall(1);
+           drawWall(2);
+           drawWall(3);
+           drawWall(4); 
+           drawWall(5);
+           
+           originalX = 750.0;
+           originalY = 750.0;
+           
+           terrainX1 = 100;
+           terrainY1 = 600;
+           terrainH1 = 145;
+           terrainW1 = 125;
+           terrainType1 = 1;
+           drawTerrain(1,1);
+           
+           
+           terrainX2 = 400;
+           terrainY2 = 350;
+           terrainH2 = 140;
+           terrainW2 = 145;
+           terrainType2 = 3;
+           drawTerrain(2,3);
+           
+           terrainX3 = 200;
+           terrainY3 = 275;
+           terrainH3 = 140;
+           terrainW3 = 125;
+           terrainType3 = 2;
+           drawTerrain(3,2); }
+           
+        //level 8 version 20
+        if (rand == 3){
+           version = 20;
+           setupStart(50.0, 50.0, 700, 700);
+           setupWall(1, 150, 650, 125, 135);
+           setupWall(2, 300, 250, 125, 135);
+           setupWall(3, 450, 600, 125, 135);
+           setupWall(4, 675, 350, 125, 135);
+           setupWall(5, 600, 550, 125, 130);
+           drawWall(1);
+           drawWall(2);
+           drawWall(3);
+           drawWall(4); 
+           drawWall(5);
+           
+           originalX = 50.0;
+           originalY = 50.0;
+           
+           terrainX1 = 150;
+           terrainY1 = 450;
+           terrainH1 = 145;
+           terrainW1 = 125;
+           terrainType1 = 3;
+           drawTerrain(1,3);
+           
+           terrainX2 = 450;
+           terrainY2 = 600;
+           terrainH2 = 140;
+           terrainW2 = 145;
+           terrainType2 = 3;
+           drawTerrain(2,3);
+           
+           terrainX3 = 825;
+           terrainY3 = 250;
+           terrainH3 = 140;
+           terrainW3 = 125;
+           terrainType3 = 3;
+           drawTerrain(3,3); }
+           
+           terrainL1 = terrainX1 - (terrainW1 / 2);
+           terrainR1 = terrainX1 + (terrainW1 / 2);
+           terrainT1 = terrainY1 - (terrainH1 / 2);
+           terrainB1 = terrainY1 + (terrainH1 / 2);
+          
+           terrainL2 = terrainX2 - (terrainW2 / 2);
+           terrainR2 = terrainX2 + (terrainW2 / 2);
+           terrainT2 = terrainY2 - (terrainH2 / 2);
+           terrainB2 = terrainY2 + (terrainH2 / 2);
+         
+           terrainL3 = terrainX3 - (terrainW3 / 2);
+           terrainR3 = terrainX3 + (terrainW3 / 2);
+           terrainT3 = terrainY3 - (terrainH3 / 2);
+           terrainB3 = terrainY3 + (terrainH3 / 2); }
+           
+           
+       if (level == 9){
+         
+           //THE FINAL LEVEL
+           version = 21;
+           setupStart(50.0, 50.0, 775, 775);
+           setupWall(1, 150, 150, 125, 140);
+           setupWall(2, 300, 300, 125, 140);
+           setupWall(3, 450, 450, 125, 140);
+           setupWall(4, 600, 600, 140, 125);
+           setupWall(5, 225, 700, 140, 125);
+           setupWall(6, 525, 150, 140, 125);
+           drawWall(1);
+           drawWall(2);
+           drawWall(3);
+           drawWall(4); 
+           drawWall(5);
+           drawWall(6);
+           
+           originalX = 50.0;
+           originalY = 50.0;
+           
+           terrainX1 = 825;
+           terrainY1 = 575;
+           terrainH1 = 150;
+           terrainW1 = 145;
+           terrainType1 = 3;
+           drawTerrain(1, 3);
+           
+           terrainX2 = 200;
+           terrainY2 = 550;
+           terrainH2 = 150;
+           terrainW2 = 145;
+           terrainType2 = 3;
+           drawTerrain(2, 3); 
+           
+           terrainX3 = 775;
+           terrainY3 = 325;
+           terrainH3 = 150;
+           terrainW3 = 145;
+           terrainType3 = 3;
+           drawTerrain(3, 3);
+           
+           terrainX4 = 800;
+           terrainY4 = 100;
+           terrainH4 = 150;
+           terrainW4 = 145;
+           terrainType4 = 3;
+           drawTerrain(4, 3);
+           
+           terrainL1 = terrainX1 - (terrainW1 / 2);
+           terrainR1 = terrainX1 + (terrainW1 / 2);
+           terrainT1 = terrainY1 - (terrainH1 / 2);
+           terrainB1 = terrainY1 + (terrainH1 / 2);
+          
+           terrainL2 = terrainX2 - (terrainW2 / 2);
+           terrainR2 = terrainX2 + (terrainW2 / 2);
+           terrainT2 = terrainY2 - (terrainH2 / 2);
+           terrainB2 = terrainY2 + (terrainH2 / 2);
+         
+           terrainL3 = terrainX3 - (terrainW3 / 2);
+           terrainR3 = terrainX3 + (terrainW3 / 2);
+           terrainT3 = terrainY3 - (terrainH3 / 2);
+           terrainB3 = terrainY3 + (terrainH3 / 2);
+         
+           terrainL4 = terrainX4 - (terrainW4 / 2);
+           terrainR4 = terrainX4 + (terrainW4 / 2);
+           terrainT4 = terrainY4 - (terrainH4 / 2);
+           terrainB4 = terrainY4 + (terrainH4 / 2); }
+        
+        if (level == 10){
+          finalScreen(); }
+          
+          
      
      
    }
@@ -611,6 +1092,35 @@ class Ball{
        if (version == 15){
          drawTerrain(1,1);
          drawTerrain(2,2); } 
+         
+       if (version == 16){
+         drawTerrain(1,2);
+         drawTerrain(2,1); }
+         
+       if (version == 17){
+          drawTerrain(1,1);
+          drawTerrain(2,2); }
+          
+       if (version == 18){
+         drawTerrain(1,3);
+         drawTerrain(2,2);
+         drawTerrain(3,1); }
+         
+       if (version == 19){
+         drawTerrain(1,1);
+         drawTerrain(2,3);
+         drawTerrain(3,2); }
+         
+       if (version == 20){
+         drawTerrain(1,3);
+         drawTerrain(2,3);
+         drawTerrain(3,3); }
+         
+       if (version == 21){
+         drawTerrain(1,3);
+         drawTerrain(2,3);
+         drawTerrain(3,3);
+         drawTerrain(4,3); }
          
        
        drawBall();
@@ -798,6 +1308,9 @@ class Ball{
           rect(terrainX7, terrainY7, terrainH7, terrainW7); }
     
      }
+     
+     public void finalScreen(){
+       text("YOU BEAT THE GAME", height/2, width/2); }
      
      public void resetObstacleTerrain(){
        obsX1 = 0;
