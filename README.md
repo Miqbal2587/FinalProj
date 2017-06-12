@@ -1,6 +1,8 @@
 #FinalProj 
 The gist: Create a 2D mini golf course. The player will control the ball’s velocity into the hole. Various obstacles and course terrain will be generated semi randomly as each level progresses in relative difficulty. 
 
+Refer to instructions and features below the developmental log
+
 Developmental log:
 
 5/27 - 6/2:  Original idea was to create a stock analysis program and stock market game. This lofty idea had to be scrapped due to difficulty fetching real time stock data from online sources and csv files of historical stock data. Original files meant to retrieve data via API and  can be found in the commit logs. We established a new prototype and started the mini golf project from this point on.
@@ -39,4 +41,23 @@ Made major strides today
 -This was due to unexpected bugs that derailed the basic program. These bugs occured when large terrain sizes and obstacles were generated. Also, the ball had difficulty interacting with other shape types besides rectangle, which would destroy the purpose of the game
 -To the best of our ability, we can only now focus on generating simple levels with small terrains and walls. Our final commit will include a moderate batch of semi random levels. 
 -Things added: Level progression system, fixed weird bouncing with walls. The ball is still a little buggy when it bounces off the window edge
+
+6/11: THE FINAL COMMIT
+Things added: bug fixes with bouncing mechanics and added all 9 levels! There are 21 different possible courses that can be generated
+1) Unresolved bug: in some cases when the ball gets in the hole and progresses to the next level, the ball retains its velocity and continues moving throughout the start of the next course
+2) Unresolved bug: we wanted to display "You win" on the screen after beating the final level, but the game was unable to load the screen
+3) Features that were scrapped: moving obstacle types, elevation/hill terrain type, display something cool after a hole in one
+4) Note: bouncing off edges and brick walls are still buggy sometimes, we weren't able to fully resolve this
+
+INSTRUCTIONS 
+1) Use your mouse scroller to adjust the power of your swing.. be careful! If you swing too hard when close to the hole, the ball will go right over it
+2) Click on the course where you want the ball's velocity to be directed towards to get the ball in its optimal position to reach the hole
+3) There are a total of 9 stages. The final level is rather tricky. Have fun!
+
+FEATURES
+1) Light green terrain - depression -> the ball will receieve a speed boost
+2) Yellow terrain - sand -> the ball will slow down
+3) Blue terrain - water -> the ball will reset to its initial coordinates
+4) Red obstacle - brick wall -> the ball will bounce off opposite the direction in which it collided with the wall
+
 
